@@ -24,18 +24,24 @@ const TriviaGenerator = () => {
         <div>
             <h1>Trivia Generator</h1>
             <form onSubmit={handleSubmit}>
+                <label htmlFor="category">Category:</label>
                 <input
+                    id="category"
                     type="text"
                     placeholder="Category"
                     value={category}
                     onChange={(e) => setCategory(e.target.value)}
                 />
+                <br />
+                <label htmlFor="numQuestions">Number of questions:</label>
                 <input
+                    id="numQuestions"
                     type="number"
                     placeholder="Number of questions"
                     value={numQuestions}
                     onChange={(e) => setNumQuestions(e.target.value)}
                 />
+                <br />
                 <button type="submit">Generate</button>
             </form>
             {error && <p>{error}</p>}
