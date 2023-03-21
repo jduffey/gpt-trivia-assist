@@ -5,11 +5,6 @@ import EditableQuestionAnswerPair from './EditableQuestionAnswerPair';
 
 const TriviaGenerator = () => {
     const [numQuestions, setNumQuestions] = useState('');
-    const [questions, setQuestions] = useState([]);
-    const [editedQuestion, setEditedQuestion] = useState('');
-    const [editedAnswer, setEditedAnswer] = useState('');
-    const [newQuestion, setNewQuestion] = useState('');
-    const [newAnswer, setNewAnswer] = useState('');
     const [error, setError] = useState('');
     const [categoriesInput, setCategoriesInput] = useState('');
     const [questionsByCategory, setQuestionsByCategory] = useState([]);
@@ -37,12 +32,6 @@ const TriviaGenerator = () => {
         } catch (err) {
             setError('Error generating trivia questions');
         }
-    };
-
-    const handleAdd = () => {
-        setQuestions([...questions, { question: newQuestion, answer: newAnswer }]);
-        setNewQuestion('');
-        setNewAnswer('');
     };
 
     const handleSave = async () => {
@@ -128,26 +117,6 @@ const TriviaGenerator = () => {
                         </div>
                     ))
                 }
-            </div>
-            <div>
-                <h2>Add New Question</h2>
-                <p>
-                    <strong>Question: </strong>
-                    <input
-                        type="text"
-                        value={newQuestion}
-                        onChange={(e) => setNewQuestion(e.target.value)}
-                    />
-                </p>
-                <p>
-                    <strong>Answer: </strong>
-                    <input
-                        type="text"
-                        value={newAnswer}
-                        onChange={(e) => setNewAnswer(e.target.value)}
-                    />
-                </p>
-                <button onClick={handleAdd}>Add</button>
             </div>
             <div>
                 <button onClick={handleSave}>Save TXT</button>
