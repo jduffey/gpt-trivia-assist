@@ -49,16 +49,15 @@ const TriviaGenerator = () => {
         setNewAnswer('');
     };
 
-    const handleExport = () => {
-        const data = JSON.stringify(questions);
-        const blob = new Blob([data], { type: 'application/json' });
-        const url = URL.createObjectURL(blob);
-        const link = document.createElement('a');
-        link.href = url;
-        link.download = 'trivia_questions.json';
-        link.click();
-        URL.revokeObjectURL(url);
+    const handleExport = async () => {
+        try {
+            await axios.post('/save', questions);
+            alert('Trivia questions saved successfully on the server.');
+        } catch (err) {
+            setError('Error saving trivia questions on the server');
+        }
     };
+
 
     return (
         <div>
