@@ -18,13 +18,14 @@ app.post('/generate', async (req, res) => {
     }
 });
 
-app.post('/save', (req, res) => {
+app.post('/save', async (req, res) => {
     const { categoryNames, questionsByCategory } = req.body;
     const fileName = categoryNames.join('_') + '.txt';
 
-    if (convertAndSave(questionsByCategory, fileName)) {
+    try {
+        await convertAndSave(questionsByCategory, fileName);
         res.status(200).json({ message: 'Trivia questions saved successfully' });
-    } else {
+    } catch (error) {
         res.status(500).json({ message: 'Server error' });
     }
 });

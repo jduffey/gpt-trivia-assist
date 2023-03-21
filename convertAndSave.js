@@ -23,16 +23,19 @@ function convertToCustomFormat(questionsByCategory) {
 function saveCustomFormatFile(data, fileName) {
     const filePath = path.join(__dirname, fileName);
 
-    fs.writeFile(filePath, data, (err) => {
-        if (err) {
-            console.error(`Error saving trivia questions: ${err}`);
-            return false;
-        } else {
-            console.log(`Trivia questions saved successfully as ${fileName}`);
-            return true;
-        }
+    return new Promise((resolve, reject) => {
+        fs.writeFile(filePath, data, (err) => {
+            if (err) {
+                console.error(`Error saving trivia questions: ${err}`);
+                reject(err);
+            } else {
+                console.log(`Trivia questions saved successfully as ${fileName}`);
+                resolve();
+            }
+        });
     });
 }
+
 
 module.exports = {
     convertAndSave: (questionsByCategory, fileName) => {
