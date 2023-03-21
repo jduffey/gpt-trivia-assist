@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 
 import EditableQuestionAnswerPair from './EditableQuestionAnswerPair';
+import TriviaInputForm from './TriviaInputForm';
 
 const TriviaGenerator = () => {
     const [numQuestions, setNumQuestions] = useState('');
@@ -73,27 +74,13 @@ const TriviaGenerator = () => {
     return (
         <div>
             <h1>Trivia Generator</h1>
-            <form onSubmit={handleSubmit}>
-                <label htmlFor="categoriesInput">Categories (comma-separated):</label>
-                <input
-                    id="categoriesInput"
-                    type="text"
-                    placeholder="Categories"
-                    value={categoriesInput}
-                    onChange={(e) => setCategoriesInput(e.target.value)}
-                />
-                <br />
-                <label htmlFor="numQuestions">Number of questions:</label>
-                <input
-                    id="numQuestions"
-                    type="number"
-                    placeholder="Number of questions"
-                    value={numQuestions}
-                    onChange={(e) => setNumQuestions(e.target.value)}
-                />
-                <br />
-                <button type="submit">Generate</button>
-            </form>
+            <TriviaInputForm
+                categoriesInput={categoriesInput}
+                setCategoriesInput={setCategoriesInput}
+                numQuestions={numQuestions}
+                setNumQuestions={setNumQuestions}
+                onSubmit={handleSubmit}
+            />
             {error && <p>{error}</p>}
             <div className="questions-container">
                 {
