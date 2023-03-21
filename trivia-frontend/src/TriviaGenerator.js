@@ -1,21 +1,18 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
+import EditableQuestionAnswerPair from './EditableQuestionAnswerPair';
+
 const TriviaGenerator = () => {
-    const [category, setCategory] = useState('');
     const [numQuestions, setNumQuestions] = useState('');
     const [questions, setQuestions] = useState([]);
-    const [editingIndex, setEditingIndex] = useState(null);
     const [editedQuestion, setEditedQuestion] = useState('');
     const [editedAnswer, setEditedAnswer] = useState('');
     const [newQuestion, setNewQuestion] = useState('');
     const [newAnswer, setNewAnswer] = useState('');
     const [error, setError] = useState('');
-
     const [categoriesInput, setCategoriesInput] = useState('');
-    // const [numQuestions, setNumQuestions] = useState('');
     const [questionsByCategory, setQuestionsByCategory] = useState([]);
-    // const [error, setError] = useState('');
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -42,31 +39,13 @@ const TriviaGenerator = () => {
         }
     };
 
-    const handleEdit = (index) => {
-        setEditingIndex(index);
-        setEditedQuestion(questions[index].question);
-        setEditedAnswer(questions[index].answer);
-    };
-
-    const handleSave = (index) => {
-        const updatedQuestions = [...questions];
-        updatedQuestions[index] = { question: editedQuestion, answer: editedAnswer };
-        setQuestions(updatedQuestions);
-        setEditingIndex(null);
-    };
-
-    const handleDelete = (index) => {
-        const updatedQuestions = questions.filter((_, i) => i !== index);
-        setQuestions(updatedQuestions);
-    };
-
     const handleAdd = () => {
         setQuestions([...questions, { question: newQuestion, answer: newAnswer }]);
         setNewQuestion('');
         setNewAnswer('');
     };
 
-    const handleExport = async () => {
+    const handleSave = async () => {
         try {
             const categoryNames = questionsByCategory.map((q) => q.category);
             await axios.post('/save', { categoryNames, questionsByCategory });
@@ -74,6 +53,32 @@ const TriviaGenerator = () => {
         } catch (err) {
             setError('Error saving trivia questions on the server');
         }
+    };
+
+    const updateQuestion = (category, questionIndex, newQuestionValue) => {
+        setQuestionsByCategory((prevState) => {
+            const updatedQuestionsByCategory = [...prevState];
+            const categoryIndex = updatedQuestionsByCategory.findIndex(
+                (item) => item.category === category
+            );
+            updatedQuestionsByCategory[categoryIndex].questions[
+                questionIndex
+            ].question = newQuestionValue;
+            return updatedQuestionsByCategory;
+        });
+    };
+
+    const updateAnswer = (category, questionIndex, newAnswerValue) => {
+        setQuestionsByCategory((prevState) => {
+            const updatedQuestionsByCategory = [...prevState];
+            const categoryIndex = updatedQuestionsByCategory.findIndex(
+                (item) => item.category === category
+            );
+            updatedQuestionsByCategory[categoryIndex].questions[
+                questionIndex
+            ].answer = newAnswerValue;
+            return updatedQuestionsByCategory;
+        });
     };
 
     return (
@@ -102,49 +107,27 @@ const TriviaGenerator = () => {
             </form>
             {error && <p>{error}</p>}
             <div className="questions-container">
-                {questionsByCategory.map((categoryQuestions, catIndex) => (
-                    <div key={catIndex}>
-                        <h2>{categoryQuestions.category}</h2>
-                        {categoryQuestions.questions.map((q, index) => (
-                            <div key={index} className="question">
-                                {editingIndex === index ? (
-                                    <>
-                                        <p>
-                                            <strong>Question: </strong>
-                                            <input
-                                                type="text"
-                                                value={editedQuestion}
-                                                onChange={(e) => setEditedQuestion(e.target.value)}
-                                            />
-                                        </p>
-                                        <p>
-                                            <strong>Answer: </strong>
-                                            <input
-                                                type="text"
-                                                value={editedAnswer}
-                                                onChange={(e) => setEditedAnswer(e.target.value)}
-                                            />
-                                        </p>
-                                        <button onClick={() => handleSave(index)}>Save</button>
-                                    </>
-                                ) : (
-                                    <>
-                                        <p>
-                                            <strong>Question: </strong>
-                                            {q.question}
-                                        </p>
-                                        <p>
-                                            <strong>Answer: </strong>
-                                            {q.answer}
-                                        </p>
-                                        <button onClick={() => handleEdit(index)}>Edit</button>
-                                    </>
-                                )}
-                                <button onClick={() => handleDelete(index)}>Delete</button>
-                            </div>
-                        ))}
-                    </div>
-                ))}
+                {
+                    questionsByCategory.map((categoryObj) => (
+                        <div key={categoryObj.category}>
+                            <h2>{categoryObj.category}</h2>
+                            {categoryObj.questions.map((questionObj, index) => (
+                                <EditableQuestionAnswerPair
+                                    key={index}
+                                    index={index}
+                                    question={questionObj.question}
+                                    answer={questionObj.answer}
+                                    onQuestionChange={(index, value) =>
+                                        updateQuestion(categoryObj.category, index, value)
+                                    }
+                                    onAnswerChange={(index, value) =>
+                                        updateAnswer(categoryObj.category, index, value)
+                                    }
+                                />
+                            ))}
+                        </div>
+                    ))
+                }
             </div>
             <div>
                 <h2>Add New Question</h2>
@@ -167,7 +150,7 @@ const TriviaGenerator = () => {
                 <button onClick={handleAdd}>Add</button>
             </div>
             <div>
-                <button onClick={handleExport}>Export JSON</button>
+                <button onClick={handleSave}>Save TXT</button>
             </div>
         </div>
     );
