@@ -1,16 +1,22 @@
 {
-  "name": "gpt-trivia-assist",
-  "version": "1.0.0",
-  "description": "",
-  "main": "generateTriviaQuestions.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "server": "node server.js"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "express": "^4.18.2"
-  }
+    "name": "gpt-trivia-assist",
+    "version": "1.0.0",
+    "description": "",
+    "main": "generateTriviaQuestions.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "server": "node server.js",
+        "client": "npm start --prefix trivia-frontend",
+        "dev": "concurrently \"npm run server\" \"npm run client\""
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "express": "^4.18.2",
+        "openai": "^3.2.1"
+    },
+    "devDependencies": {
+        "concurrently": "^7.6.0"
+    }
 }
