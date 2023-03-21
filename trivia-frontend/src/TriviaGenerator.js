@@ -39,9 +39,9 @@ const TriviaGenerator = () => {
                 <button type="submit">Generate</button>
             </form>
             {error && <p>{error}</p>}
-            <ul>
+            <div className="questions-container">
                 {questions.map((q, index) => (
-                    <li key={index}>
+                    <div key={index} className="question">
                         <p>
                             <strong>Question: </strong>
                             {q.question}
@@ -50,9 +50,9 @@ const TriviaGenerator = () => {
                             <strong>Answer: </strong>
                             {q.answer}
                         </p>
-                    </li>
+                    </div>
                 ))}
-            </ul>
+            </div>
         </div>
     );
 };
