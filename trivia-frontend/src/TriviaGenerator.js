@@ -12,14 +12,31 @@ const TriviaGenerator = () => {
     const [newAnswer, setNewAnswer] = useState('');
     const [error, setError] = useState('');
 
+    const [categoriesInput, setCategoriesInput] = useState('');
+    // const [numQuestions, setNumQuestions] = useState('');
+    const [questionsByCategory, setQuestionsByCategory] = useState([]);
+    // const [error, setError] = useState('');
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError('');
-        setQuestions([]);
+        setQuestionsByCategory([]);
+
+        const categories = categoriesInput.split(',').map((cat) => cat.trim());
 
         try {
-            const response = await axios.post('/generate', { category, numQuestions });
-            setQuestions(response.data);
+            const questionsPromises = categories.map((category) =>
+                axios.post('/generate', { category, numQuestions }),
+            );
+
+            const responseList = await Promise.all(questionsPromises);
+
+            const newQuestionsByCategory = responseList.map((response, index) => ({
+                category: categories[index],
+                questions: response.data,
+            }));
+
+            setQuestionsByCategory(newQuestionsByCategory);
         } catch (err) {
             setError('Error generating trivia questions');
         }
@@ -51,7 +68,8 @@ const TriviaGenerator = () => {
 
     const handleExport = async () => {
         try {
-            await axios.post('/save', { category, questions });
+            const categoryNames = questionsByCategory.map((q) => q.category);
+            await axios.post('/save', { categoryNames, questionsByCategory });
             alert('Trivia questions saved successfully on the server.');
         } catch (err) {
             setError('Error saving trivia questions on the server');
@@ -62,13 +80,13 @@ const TriviaGenerator = () => {
         <div>
             <h1>Trivia Generator</h1>
             <form onSubmit={handleSubmit}>
-                <label htmlFor="category">Category:</label>
+                <label htmlFor="categoriesInput">Categories (comma-separated):</label>
                 <input
-                    id="category"
+                    id="categoriesInput"
                     type="text"
-                    placeholder="Category"
-                    value={category}
-                    onChange={(e) => setCategory(e.target.value)}
+                    placeholder="Categories"
+                    value={categoriesInput}
+                    onChange={(e) => setCategoriesInput(e.target.value)}
                 />
                 <br />
                 <label htmlFor="numQuestions">Number of questions:</label>
@@ -84,42 +102,47 @@ const TriviaGenerator = () => {
             </form>
             {error && <p>{error}</p>}
             <div className="questions-container">
-                {questions.map((q, index) => (
-                    <div key={index} className="question">
-                        {editingIndex === index ? (
-                            <>
-                                <p>
-                                    <strong>Question: </strong>
-                                    <input
-                                        type="text"
-                                        value={editedQuestion}
-                                        onChange={(e) => setEditedQuestion(e.target.value)}
-                                    />
-                                </p>
-                                <p>
-                                    <strong>Answer: </strong>
-                                    <input
-                                        type="text"
-                                        value={editedAnswer}
-                                        onChange={(e) => setEditedAnswer(e.target.value)}
-                                    />
-                                </p>
-                                <button onClick={() => handleSave(index)}>Save</button>
-                            </>
-                        ) : (
-                            <>
-                                <p>
-                                    <strong>Question: </strong>
-                                    {q.question}
-                                </p>
-                                <p>
-                                    <strong>Answer: </strong>
-                                    {q.answer}
-                                </p>
-                                <button onClick={() => handleEdit(index)}>Edit</button>
-                            </>
-                        )}
-                        <button onClick={() => handleDelete(index)}>Delete</button>
+                {questionsByCategory.map((categoryQuestions, catIndex) => (
+                    <div key={catIndex}>
+                        <h2>{categoryQuestions.category}</h2>
+                        {categoryQuestions.questions.map((q, index) => (
+                            <div key={index} className="question">
+                                {editingIndex === index ? (
+                                    <>
+                                        <p>
+                                            <strong>Question: </strong>
+                                            <input
+                                                type="text"
+                                                value={editedQuestion}
+                                                onChange={(e) => setEditedQuestion(e.target.value)}
+                                            />
+                                        </p>
+                                        <p>
+                                            <strong>Answer: </strong>
+                                            <input
+                                                type="text"
+                                                value={editedAnswer}
+                                                onChange={(e) => setEditedAnswer(e.target.value)}
+                                            />
+                                        </p>
+                                        <button onClick={() => handleSave(index)}>Save</button>
+                                    </>
+                                ) : (
+                                    <>
+                                        <p>
+                                            <strong>Question: </strong>
+                                            {q.question}
+                                        </p>
+                                        <p>
+                                            <strong>Answer: </strong>
+                                            {q.answer}
+                                        </p>
+                                        <button onClick={() => handleEdit(index)}>Edit</button>
+                                    </>
+                                )}
+                                <button onClick={() => handleDelete(index)}>Delete</button>
+                            </div>
+                        ))}
                     </div>
                 ))}
             </div>

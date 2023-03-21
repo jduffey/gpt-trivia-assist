@@ -2,6 +2,7 @@ const express = require('express');
 const fs = require('fs');
 const path = require('path');
 const { generateTriviaQuestions } = require('./generateTriviaQuestions');
+const { convertAndSave } = require('./convertAndSave');
 
 const app = express();
 app.use(express.json());
@@ -18,18 +19,14 @@ app.post('/generate', async (req, res) => {
 });
 
 app.post('/save', (req, res) => {
-    const { category, questions } = req.body;
-    const data = JSON.stringify({ [category]: questions });
-    const filePath = path.join(__dirname, `trivia_questions_${category}.json`);
+    const { categoryNames, questionsByCategory } = req.body;
+    const fileName = categoryNames.join('_') + '.txt';
 
-    fs.writeFile(filePath, data, (err) => {
-        if (err) {
-            console.error(`Error saving trivia questions: ${err}`);
-            res.status(500).json({ message: 'Server error' });
-        } else {
-            res.status(200).json({ message: 'Trivia questions saved successfully' });
-        }
-    });
+    if (convertAndSave(questionsByCategory, fileName)) {
+        res.status(200).json({ message: 'Trivia questions saved successfully' });
+    } else {
+        res.status(500).json({ message: 'Server error' });
+    }
 });
 
 const PORT = process.env.PORT || 3000;
