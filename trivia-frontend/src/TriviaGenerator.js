@@ -51,13 +51,12 @@ const TriviaGenerator = () => {
 
     const handleExport = async () => {
         try {
-            await axios.post('/save', questions);
+            await axios.post('/save', { category, questions });
             alert('Trivia questions saved successfully on the server.');
         } catch (err) {
             setError('Error saving trivia questions on the server');
         }
     };
-
 
     return (
         <div>

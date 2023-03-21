@@ -18,9 +18,9 @@ app.post('/generate', async (req, res) => {
 });
 
 app.post('/save', (req, res) => {
-    const questions = req.body;
-    const data = JSON.stringify(questions);
-    const filePath = path.join(__dirname, 'trivia_questions.json');
+    const { category, questions } = req.body;
+    const data = JSON.stringify({ [category]: questions });
+    const filePath = path.join(__dirname, `trivia_questions_${category}.json`);
 
     fs.writeFile(filePath, data, (err) => {
         if (err) {
