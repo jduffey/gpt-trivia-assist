@@ -91,6 +91,7 @@ const TriviaGenerator = () => {
                                     onAnswerChange={(index, value) =>
                                         updateAnswer(categoryObj.category, index, value)
                                     }
+                                    setDifficulty={(index, diffiRank) => console.log(`You set question number ${index} as ${diffiRank}`)}
                                 />
                             ))}
                         </div>

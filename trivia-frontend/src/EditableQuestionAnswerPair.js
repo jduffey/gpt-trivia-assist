@@ -1,6 +1,6 @@
 import React from 'react';
 
-const EditableQuestionAnswerPair = ({ question, answer, index, onQuestionChange, onAnswerChange }) => {
+const EditableQuestionAnswerPair = ({ question, answer, index, onQuestionChange, onAnswerChange, setDifficulty }) => {
     return (
         <div className="question-answer-pair">
             <label htmlFor={`question-${index}`}>Question {index + 1}:</label>
@@ -17,19 +17,19 @@ const EditableQuestionAnswerPair = ({ question, answer, index, onQuestionChange,
             />
             <button
                 id="save-easy"
-                onClick={() => console.log("You clicked the easy button")}
+                onClick={() => setDifficulty(index, 'easy')}
             >
                 Easy
             </button>
             <button
                 id="save-med"
-                onClick={() => console.log("You clicked the medium button")}
+                onClick={() => setDifficulty(index, 'medium')}
             >
                 Medium
             </button>
             <button
                 id="save-difficult"
-                onClick={() => console.log("You clicked the difficult button")}
+                onClick={() => setDifficulty(index, 'difficult')}
             >
                 Difficult
             </button>
