@@ -21,7 +21,7 @@ function convertToCustomFormat(questionsByCategory) {
 }
 
 function saveCustomFormatFile(data, fileName) {
-    const filePath = path.join(__dirname, fileName);
+    const filePath = path.join(__dirname, `output/${fileName}`);
 
     return new Promise((resolve, reject) => {
         fs.writeFile(filePath, data, (err) => {
