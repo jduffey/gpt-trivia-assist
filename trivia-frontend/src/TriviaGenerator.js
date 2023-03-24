@@ -30,10 +30,23 @@ const TriviaGenerator = () => {
     };
 
     const handleSave = async () => {
-        console.log(questionsByCategory);
         try {
             const categoryNames = questionsByCategory.map((q) => q.category);
-            await axios.post('/save', { categoryNames, questionsByCategory });
+            console.log(categoryNames);
+            console.log(questionsByCategory);
+            const filteredQuestionsByCategory =
+                questionsByCategory.map((q) => {
+                    return {
+                        category: q.category,
+                        questions: q.questions.filter((qaPair) => {
+                            return typeof qaPair.difficulty !== "undefined";
+                        })
+                    };
+                });
+            await axios.post('/save', {
+                categoryNames,
+                questionsByCategory: filteredQuestionsByCategory
+            });
             alert('Trivia questions saved successfully on the server.');
         } catch (err) {
             setError('Error saving trivia questions on the server');
