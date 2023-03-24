@@ -21,7 +21,12 @@ function convertToCustomFormat(questionsByCategory) {
 }
 
 function saveCustomFormatFile(data, fileName) {
-    const filePath = path.join(__dirname, `output/${fileName}`);
+    const outputDir = path.join(__dirname, 'output');
+    if (!fs.existsSync(outputDir)) {
+        fs.mkdirSync(outputDir);
+    }
+
+    const filePath = path.join(outputDir, fileName);
 
     return new Promise((resolve, reject) => {
         fs.writeFile(filePath, data, (err) => {
