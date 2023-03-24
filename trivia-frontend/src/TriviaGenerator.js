@@ -40,7 +40,7 @@ const TriviaGenerator = () => {
                         category: q.category,
                         questions: q.questions.filter((qaPair) => {
                             return typeof qaPair.difficulty !== "undefined";
-                        })
+                        }).sort((a, b) => a.difficulty - b.difficulty)
                     };
                 });
             await axios.post('/save', {

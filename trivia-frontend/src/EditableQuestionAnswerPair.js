@@ -17,19 +17,19 @@ const EditableQuestionAnswerPair = ({ question, answer, index, onQuestionChange,
             />
             <button
                 id="save-easy"
-                onClick={() => setDifficulty(index, 'easy')}
+                onClick={() => setDifficulty(index, 0)}
             >
                 Easy
             </button>
             <button
                 id="save-med"
-                onClick={() => setDifficulty(index, 'medium')}
+                onClick={() => setDifficulty(index, 1)}
             >
                 Medium
             </button>
             <button
                 id="save-difficult"
-                onClick={() => setDifficulty(index, 'difficult')}
+                onClick={() => setDifficulty(index, 2)}
             >
                 Difficult
             </button>
