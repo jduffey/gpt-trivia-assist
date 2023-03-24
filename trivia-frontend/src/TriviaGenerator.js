@@ -5,7 +5,6 @@ import EditableQuestionAnswerPair from './EditableQuestionAnswerPair';
 import TriviaInputForm from './TriviaInputForm';
 
 const TriviaGenerator = () => {
-    const [numQuestions, setNumQuestions] = useState('');
     const [error, setError] = useState('');
     const [categoriesInput, setCategoriesInput] = useState('');
     const [questionsByCategory, setQuestionsByCategory] = useState([]);
@@ -19,7 +18,7 @@ const TriviaGenerator = () => {
 
         try {
             const questionsPromises = categories.map((category) =>
-                axios.post('/generate', { category, numQuestions }),
+                axios.post('/generate', { category }),
             );
 
             const responseList = await Promise.all(questionsPromises);
@@ -77,8 +76,6 @@ const TriviaGenerator = () => {
             <TriviaInputForm
                 categoriesInput={categoriesInput}
                 setCategoriesInput={setCategoriesInput}
-                numQuestions={numQuestions}
-                setNumQuestions={setNumQuestions}
                 onSubmit={handleSubmit}
             />
             {error && <p>{error}</p>}
