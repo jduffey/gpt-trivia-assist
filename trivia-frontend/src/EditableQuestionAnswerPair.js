@@ -15,6 +15,24 @@ const EditableQuestionAnswerPair = ({ question, answer, index, onQuestionChange,
                 value={answer}
                 onChange={(event) => onAnswerChange(index, event.target.value)}
             />
+            <button
+                id="save-easy"
+                onClick={() => console.log("You clicked the easy button")}
+            >
+                Easy
+            </button>
+            <button
+                id="save-med"
+                onClick={() => console.log("You clicked the medium button")}
+            >
+                Medium
+            </button>
+            <button
+                id="save-difficult"
+                onClick={() => console.log("You clicked the difficult button")}
+            >
+                Difficult
+            </button>
         </div>
     );
 };
