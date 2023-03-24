@@ -6,7 +6,7 @@ import TriviaInputForm from './TriviaInputForm';
 
 const TriviaGenerator = () => {
     const [error, setError] = useState('');
-    const [categoriesInput, setCategoriesInput] = useState('');
+    const [categoryInput, setCategoryInput] = useState('');
     const [questionsByCategory, setQuestionsByCategory] = useState([]);
 
     const handleSubmit = async (e) => {
@@ -14,19 +14,14 @@ const TriviaGenerator = () => {
         setError('');
         setQuestionsByCategory([]);
 
-        const categories = categoriesInput.split(',').map((cat) => cat.trim());
-
         try {
-            const questionsPromises = categories.map((category) =>
-                axios.post('/generate', { category }),
-            );
+            const response = await axios.post('/generate', { categoryInput });
+            console.log(response);
 
-            const responseList = await Promise.all(questionsPromises);
-
-            const newQuestionsByCategory = responseList.map((response, index) => ({
-                category: categories[index],
+            const newQuestionsByCategory = [{
+                category: categoryInput,
                 questions: response.data,
-            }));
+            }];
 
             setQuestionsByCategory(newQuestionsByCategory);
         } catch (err) {
@@ -74,8 +69,8 @@ const TriviaGenerator = () => {
         <div>
             <h1>Trivia Generator</h1>
             <TriviaInputForm
-                categoriesInput={categoriesInput}
-                setCategoriesInput={setCategoriesInput}
+                categoryInput={categoryInput}
+                setCategoryInput={setCategoryInput}
                 onSubmit={handleSubmit}
             />
             {error && <p>{error}</p>}

@@ -1,15 +1,15 @@
 import React from 'react';
 
-const TriviaInputForm = ({ categoriesInput, setCategoriesInput, onSubmit }) => {
+const TriviaInputForm = ({ categoryInput, setCategoryInput, onSubmit }) => {
     return (
         <form onSubmit={onSubmit}>
-            <label htmlFor="categoriesInput">Categories (comma-separated):</label>
+            <label htmlFor="categoryInput">Category:</label>
             <input
-                id="categoriesInput"
+                id="categoryInput"
                 type="text"
-                placeholder="Categories"
-                value={categoriesInput}
-                onChange={(e) => setCategoriesInput(e.target.value)}
+                placeholder="Category"
+                value={categoryInput}
+                onChange={(e) => setCategoryInput(e.target.value)}
             />
             <br />
             <button type="submit">Generate 30 Questions</button>
