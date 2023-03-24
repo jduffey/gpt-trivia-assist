@@ -16,7 +16,6 @@ const TriviaGenerator = () => {
 
         try {
             const response = await axios.post('/generate', { categoryInput });
-            console.log(response);
 
             const newQuestionsByCategory = [{
                 category: categoryInput,
@@ -30,19 +29,22 @@ const TriviaGenerator = () => {
     };
 
     const handleSave = async () => {
+        console.log('Saving trivia questions...');
         try {
-            const categoryNames = questionsByCategory.map((q) => q.category);
-            console.log(categoryNames);
+            console.log(`React state of questionsByCategory:`)
             console.log(questionsByCategory);
+            const categoryNames = questionsByCategory.map((q) => q.category);
             const filteredQuestionsByCategory =
                 questionsByCategory.map((q) => {
                     return {
                         category: q.category,
-                        questions: q.questions.filter((qaPair) => {
-                            return typeof qaPair.difficulty !== "undefined";
-                        }).sort((a, b) => a.difficulty - b.difficulty)
+                        questions: q.questions
+                            .filter((qaPair) => typeof qaPair.difficulty !== "undefined")
+                            .sort((a, b) => a.difficulty - b.difficulty)
                     };
                 });
+            console.log('Questions filtered and sorted by difficulty:');
+            console.log(filteredQuestionsByCategory);
             await axios.post('/save', {
                 categoryNames,
                 questionsByCategory: filteredQuestionsByCategory
@@ -112,13 +114,18 @@ const TriviaGenerator = () => {
                                     index={index}
                                     question={questionObj.question}
                                     answer={questionObj.answer}
-                                    onQuestionChange={(index, value) =>
-                                        updateQuestion(categoryObj.category, index, value)
+                                    onQuestionChange={
+                                        (index, value) =>
+                                            updateQuestion(categoryObj.category, index, value)
                                     }
-                                    onAnswerChange={(index, value) =>
-                                        updateAnswer(categoryObj.category, index, value)
+                                    onAnswerChange={
+                                        (index, value) =>
+                                            updateAnswer(categoryObj.category, index, value)
                                     }
-                                    setDifficulty={(index, diffiRank) => updateDifficulty(categoryObj.category, index, diffiRank)}
+                                    setDifficulty={
+                                        (index, diffiRank) =>
+                                            updateDifficulty(categoryObj.category, index, diffiRank)
+                                    }
                                 />
                             ))}
                         </div>

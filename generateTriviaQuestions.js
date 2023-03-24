@@ -14,27 +14,31 @@ const generateTriviaQuestions = async (category) => {
         max_tokens: 1000,
     };
 
+    console.log('Querying ChatGPT API with the following params:');
     console.log(data);
 
     try {
         const response = await openai.createCompletion(data);
         const text = response.data.choices[0].text.trim();
+        console.log('Parsed response from ChatGPT API:');
         console.log(text);
 
         // Process the returned text to extract questions and answers
         const rawQuestions = text.split('\n').filter(line => line.length > 0);
-        const questions = [];
+        const qaPairs = [];
 
         for (let i = 0; i < rawQuestions.length; i += 2) {
             if (rawQuestions[i + 1]) {
-                questions.push({
+                qaPairs.push({
                     question: rawQuestions[i].substring(3),
                     answer: rawQuestions[i + 1].substring(3)
                 });
             }
         }
 
-        return questions;
+        console.log('Parsed questions and answers:');
+        console.log(qaPairs);
+        return qaPairs;
     } catch (error) {
         console.error(`Error querying ChatGPT API: ${error}`);
     }
