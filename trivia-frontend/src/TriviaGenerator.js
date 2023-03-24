@@ -30,6 +30,7 @@ const TriviaGenerator = () => {
     };
 
     const handleSave = async () => {
+        console.log(questionsByCategory);
         try {
             const categoryNames = questionsByCategory.map((q) => q.category);
             await axios.post('/save', { categoryNames, questionsByCategory });
@@ -65,6 +66,19 @@ const TriviaGenerator = () => {
         });
     };
 
+    const updateDifficulty = (category, questionIndex, newDifficultyValue) => {
+        setQuestionsByCategory((prevState) => {
+            const updatedQuestionsByCategory = [...prevState];
+            const categoryIndex = updatedQuestionsByCategory.findIndex(
+                (item) => item.category === category
+            );
+            updatedQuestionsByCategory[categoryIndex].questions[
+                questionIndex
+            ].difficulty = newDifficultyValue;
+            return updatedQuestionsByCategory;
+        });
+    }
+
     return (
         <div>
             <h1>Trivia Generator</h1>
@@ -91,7 +105,7 @@ const TriviaGenerator = () => {
                                     onAnswerChange={(index, value) =>
                                         updateAnswer(categoryObj.category, index, value)
                                     }
-                                    setDifficulty={(index, diffiRank) => console.log(`You set question number ${index} as ${diffiRank}`)}
+                                    setDifficulty={(index, diffiRank) => updateDifficulty(categoryObj.category, index, diffiRank)}
                                 />
                             ))}
                         </div>
