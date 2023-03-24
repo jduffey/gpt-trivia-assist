@@ -14,9 +14,12 @@ const generateTriviaQuestions = async (category) => {
         max_tokens: 1000,
     };
 
+    console.log(data);
+
     try {
         const response = await openai.createCompletion(data);
         const text = response.data.choices[0].text.trim();
+        console.log(text);
 
         // Process the returned text to extract questions and answers
         const rawQuestions = text.split('\n').filter(line => line.length > 0);

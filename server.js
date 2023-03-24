@@ -8,9 +8,10 @@ const app = express();
 app.use(express.json());
 
 app.post('/generate', async (req, res) => {
-    const { category, numQuestions } = req.body;
+    console.log(req.body);
+    const { categoryInput } = req.body;
     try {
-        const questions = await generateTriviaQuestions(category, numQuestions);
+        const questions = await generateTriviaQuestions(categoryInput);
         res.status(200).json(questions);
     } catch (error) {
         console.error(`Error generating trivia questions: ${error}`);
