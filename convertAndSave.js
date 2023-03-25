@@ -1,6 +1,15 @@
 const fs = require('fs');
 const path = require('path');
 
+const ANSWER_TERMINATOR = '^^^^';
+const QUESTION_TYPE = {
+    text: "T",
+    photo: "P",
+    sound: "S",
+};
+const TEXT_FONT = "#Courier New#28#True#True#16777215#";
+const IS_NOT_DAILY_DOUBLE = "N";
+
 function convertToCustomFormat(questionsByCategory) {
     let output = '';
 
@@ -11,9 +20,9 @@ function convertToCustomFormat(questionsByCategory) {
 
         questions.forEach(q => {
             output += q.question + '\n';
-            output += q.answer + '^^^^\n';
-            output += 'N\n';
-            output += 'T#Courier New#28#True#True#16777215#\n';
+            output += q.answer + ANSWER_TERMINATOR + '\n';
+            output += IS_NOT_DAILY_DOUBLE + '\n';
+            output += QUESTION_TYPE.text + TEXT_FONT + '\n';
         });
     });
 
@@ -21,7 +30,12 @@ function convertToCustomFormat(questionsByCategory) {
 }
 
 function saveCustomFormatFile(data, fileName) {
-    const filePath = path.join(__dirname, `output/${fileName}`);
+    const outputDir = path.join(__dirname, 'output');
+    if (!fs.existsSync(outputDir)) {
+        fs.mkdirSync(outputDir);
+    }
+
+    const filePath = path.join(outputDir, fileName);
 
     return new Promise((resolve, reject) => {
         fs.writeFile(filePath, data, (err) => {
@@ -35,7 +49,6 @@ function saveCustomFormatFile(data, fileName) {
         });
     });
 }
-
 
 module.exports = {
     convertAndSave: (questionsByCategory, fileName) => {

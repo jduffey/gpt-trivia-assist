@@ -1,8 +1,40 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
-const TriviaInputForm = ({ categoryInput, setCategoryInput, onSubmit }) => {
+const TriviaInputForm = ({
+    categoryInput,
+    setCategoryInput,
+    numQuestions,
+    onSubmit,
+    dataLoaded,
+}) => {
+    const [elapsedSeconds, setElapsedSeconds] = useState(0);
+    const [timerActive, setTimerActive] = useState(false);
+
+    useEffect(() => {
+        if (timerActive) {
+            const timer = setInterval(() => {
+                setElapsedSeconds((prevElapsedSeconds) => prevElapsedSeconds + 1);
+            }, 1000);
+
+            return () => clearInterval(timer);
+        }
+    }, [timerActive]);
+
+    useEffect(() => {
+        if (dataLoaded) {
+            setTimerActive(false);
+        }
+    }, [dataLoaded]);
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        setElapsedSeconds(0);
+        setTimerActive(true);
+        onSubmit(e);
+    };
+
     return (
-        <form onSubmit={onSubmit}>
+        <form onSubmit={handleSubmit}>
             <label htmlFor="categoryInput">Category:</label>
             <input
                 id="categoryInput"
@@ -12,7 +44,8 @@ const TriviaInputForm = ({ categoryInput, setCategoryInput, onSubmit }) => {
                 onChange={(e) => setCategoryInput(e.target.value)}
             />
             <br />
-            <button type="submit">Generate 30 Questions</button>
+            <button type="submit">{`Generate ${numQuestions} Questions`}</button>
+            {timerActive && !dataLoaded && <p>Elapsed time: {elapsedSeconds} seconds</p>}
         </form>
     );
 };

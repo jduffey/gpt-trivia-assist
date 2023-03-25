@@ -5,38 +5,51 @@ const configuration = new Configuration({
 });
 const openai = new OpenAIApi(configuration);
 
-const generateTriviaQuestions = async (category) => {
-    const prompt = `Generate 30 trivia questions and answers in the category "${category}" using the following format: \nQ: [Question]\nA: [Answer]\n`;
+const buildPrompt = (category, numQuestions) => {
+    return `Generate ${numQuestions} trivia questions and answers in the category "${category}" using the following format: \nQ: [Question]\nA: [Answer]\n`;
+};
 
-    const data = {
-        model: "text-davinci-003",
-        prompt: prompt,
-        max_tokens: 1000,
-    };
+const formatApiResponse = response => {
+    return response.data.choices[0].text.trim();
+};
 
-    console.log(data);
+const parseQaPairs = rawQuestions => {
+    return rawQuestions
+        .filter((_, index) => index % 2 === 0)
+        .map((question, index) => ({
+            question: question.substring(3),
+            answer: rawQuestions[index * 2 + 1].substring(3)
+        }));
+};
 
+const generateTriviaQuestions = async (category, numQuestions) => {
     try {
+        const prompt = buildPrompt(category, numQuestions);
+        const data = {
+            model: "text-davinci-003",
+            prompt: prompt,
+            max_tokens: 1000,
+        };
+
+        console.log('Querying ChatGPT API with the following params:');
+        console.log(data);
+
         const response = await openai.createCompletion(data);
-        const text = response.data.choices[0].text.trim();
+        console.log('Response from ChatGPT API:');
+        console.log(response);
+        const text = formatApiResponse(response);
+        console.log('Parsed response from ChatGPT API:');
         console.log(text);
 
-        // Process the returned text to extract questions and answers
         const rawQuestions = text.split('\n').filter(line => line.length > 0);
-        const questions = [];
+        const qaPairs = parseQaPairs(rawQuestions);
 
-        for (let i = 0; i < rawQuestions.length; i += 2) {
-            if (rawQuestions[i + 1]) {
-                questions.push({
-                    question: rawQuestions[i].substring(3),
-                    answer: rawQuestions[i + 1].substring(3)
-                });
-            }
-        }
-
-        return questions;
+        console.log('Parsed questions and answers:');
+        console.log(qaPairs);
+        return qaPairs;
     } catch (error) {
         console.error(`Error querying ChatGPT API: ${error}`);
+        throw error;
     }
 };
 
