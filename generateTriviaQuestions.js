@@ -5,8 +5,8 @@ const configuration = new Configuration({
 });
 const openai = new OpenAIApi(configuration);
 
-const generateTriviaQuestions = async (category) => {
-    const prompt = `Generate 30 trivia questions and answers in the category "${category}" using the following format: \nQ: [Question]\nA: [Answer]\n`;
+const generateTriviaQuestions = async (category, numQuestions) => {
+    const prompt = `Generate ${numQuestions} trivia questions and answers in the category "${category}" using the following format: \nQ: [Question]\nA: [Answer]\n`;
 
     const data = {
         model: "text-davinci-003",

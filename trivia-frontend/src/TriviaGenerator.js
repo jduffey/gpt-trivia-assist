@@ -4,6 +4,8 @@ import axios from 'axios';
 import EditableQuestionAnswerPair from './EditableQuestionAnswerPair';
 import TriviaInputForm from './TriviaInputForm';
 
+const NUM_QUESTIONS = 1;
+
 const TriviaGenerator = () => {
     const [error, setError] = useState('');
     const [categoryInput, setCategoryInput] = useState('');
@@ -15,7 +17,7 @@ const TriviaGenerator = () => {
         setQuestionsByCategory([]);
 
         try {
-            const response = await axios.post('/generate', { categoryInput });
+            const response = await axios.post('/generate', { categoryInput, NUM_QUESTIONS });
 
             const newQuestionsByCategory = [{
                 category: categoryInput,
@@ -100,10 +102,12 @@ const TriviaGenerator = () => {
             <TriviaInputForm
                 categoryInput={categoryInput}
                 setCategoryInput={setCategoryInput}
+                numQuestions={NUM_QUESTIONS}
                 onSubmit={handleSubmit}
             />
             {error && <p>{error}</p>}
             <div className="questions-container">
+                Q&A's START
                 {
                     questionsByCategory.map((categoryObj) => (
                         <div key={categoryObj.category}>
@@ -131,6 +135,8 @@ const TriviaGenerator = () => {
                         </div>
                     ))
                 }
+                <br />
+                Q&A's END
             </div>
             <div>
                 <button onClick={handleSave}>Save TXT</button>

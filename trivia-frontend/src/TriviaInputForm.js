@@ -1,6 +1,6 @@
 import React from 'react';
 
-const TriviaInputForm = ({ categoryInput, setCategoryInput, onSubmit }) => {
+const TriviaInputForm = ({ categoryInput, setCategoryInput, numQuestions, onSubmit }) => {
     return (
         <form onSubmit={onSubmit}>
             <label htmlFor="categoryInput">Category:</label>
@@ -12,7 +12,9 @@ const TriviaInputForm = ({ categoryInput, setCategoryInput, onSubmit }) => {
                 onChange={(e) => setCategoryInput(e.target.value)}
             />
             <br />
-            <button type="submit">Generate 30 Questions</button>
+            <button type="submit">
+                {`Generate ${numQuestions} Questions`}
+                </button>
         </form>
     );
 };
