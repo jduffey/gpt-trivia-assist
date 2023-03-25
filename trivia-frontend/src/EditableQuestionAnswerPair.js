@@ -9,6 +9,12 @@ const EditableQuestionAnswerPair = ({
     onAnswerChange,
     setDifficulty,
 }) => {
+    const difficultyLevels = [
+        { value: 0, label: "Easy" },
+        { value: 1, label: "Medium" },
+        { value: 2, label: "Difficult" },
+    ];
+
     return (
         <div className="question-answer-pair">
             <textarea
@@ -28,27 +34,15 @@ const EditableQuestionAnswerPair = ({
             <div className="difficulty-and-index">
                 <span className="question-index">Q {index}</span>
                 <div className="difficulty-buttons">
-                    <button
-                        className={`difficulty-btn ${difficulty === 0 ? 'selected-difficulty' : ''}`}
-                        id="save-easy"
-                        onClick={() => setDifficulty(index, 0)}
-                    >
-                        Easy
-                    </button>
-                    <button
-                        className={`difficulty-btn ${difficulty === 1 ? 'selected-difficulty' : ''}`}
-                        id="save-med"
-                        onClick={() => setDifficulty(index, 1)}
-                    >
-                        Medium
-                    </button>
-                    <button
-                        className={`difficulty-btn ${difficulty === 2 ? 'selected-difficulty' : ''}`}
-                        id="save-difficult"
-                        onClick={() => setDifficulty(index, 2)}
-                    >
-                        Difficult
-                    </button>
+                    {difficultyLevels.map(({ value, label }) => (
+                        <button
+                            key={value}
+                            className={`difficulty-btn ${difficulty === value ? 'selected-difficulty' : ''}`}
+                            onClick={() => setDifficulty(index, value)}
+                        >
+                            {label}
+                        </button>
+                    ))}
                 </div>
             </div>
         </div>

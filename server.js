@@ -8,6 +8,7 @@ const app = express();
 app.use(express.json());
 
 app.post('/generate', async (req, res) => {
+    console.log('Request body sent from client:');
     console.log(req.body);
     const { categoryInput, numQuestions } = req.body;
     try {

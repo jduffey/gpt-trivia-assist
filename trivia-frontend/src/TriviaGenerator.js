@@ -4,13 +4,14 @@ import axios from 'axios';
 import EditableQuestionAnswerPair from './EditableQuestionAnswerPair';
 import TriviaInputForm from './TriviaInputForm';
 
-const NUM_QUESTIONS = 30;
+const DEFAULT_NUM_QUESTIONS = 7;
 
 const TriviaGenerator = () => {
     const [error, setError] = useState('');
     const [categoryInput, setCategoryInput] = useState('');
     const [questionsByCategory, setQuestionsByCategory] = useState([]);
     const [dataLoaded, setDataLoaded] = useState(false);
+    const [numQuestions, setNumQuestions] = useState(DEFAULT_NUM_QUESTIONS);
 
     const handleSubmit = async (e) => {
         setDataLoaded(false);
@@ -19,7 +20,7 @@ const TriviaGenerator = () => {
         setQuestionsByCategory([]);
 
         try {
-            const response = await axios.post('/generate', { categoryInput, numQuestions: NUM_QUESTIONS });
+            const response = await axios.post('/generate', { categoryInput, numQuestions: numQuestions });
 
             const newQuestionsByCategory = [{
                 category: categoryInput,
@@ -126,7 +127,8 @@ const TriviaGenerator = () => {
                 className="input-form"
                 categoryInput={categoryInput}
                 setCategoryInput={setCategoryInput}
-                numQuestions={NUM_QUESTIONS}
+                numQuestions={numQuestions}
+                setNumQuestions={setNumQuestions}
                 onSubmit={handleSubmit}
                 dataLoaded={dataLoaded}
             />
