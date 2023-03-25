@@ -1,6 +1,12 @@
 import React, { useState, useEffect } from 'react';
 
-const TriviaInputForm = ({ categoryInput, setCategoryInput, numQuestions, onSubmit }) => {
+const TriviaInputForm = ({
+    categoryInput,
+    setCategoryInput,
+    numQuestions,
+    onSubmit,
+    dataLoaded,
+}) => {
     const [elapsedSeconds, setElapsedSeconds] = useState(0);
     const [timerActive, setTimerActive] = useState(false);
 
@@ -13,6 +19,12 @@ const TriviaInputForm = ({ categoryInput, setCategoryInput, numQuestions, onSubm
             return () => clearInterval(timer);
         }
     }, [timerActive]);
+
+    useEffect(() => {
+        if (dataLoaded) {
+            setTimerActive(false);
+        }
+    }, [dataLoaded]);
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -31,10 +43,8 @@ const TriviaInputForm = ({ categoryInput, setCategoryInput, numQuestions, onSubm
                 onChange={(e) => setCategoryInput(e.target.value)}
             />
             <br />
-            <button type="submit">
-                {`Generate ${numQuestions} Questions`}
-            </button>
-            {timerActive && <p>Elapsed time: {elapsedSeconds} seconds</p>}
+            <button type="submit">{`Generate ${numQuestions} Questions`}</button>
+            {timerActive && !dataLoaded && <p>Elapsed time: {elapsedSeconds} seconds</p>}
         </form>
     );
 };
