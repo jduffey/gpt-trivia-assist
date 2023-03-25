@@ -40,11 +40,19 @@ function saveCustomFormatFile(data, fileName) {
     return new Promise((resolve, reject) => {
         fs.writeFile(filePath, data, (err) => {
             if (err) {
-                console.error(`Error saving trivia questions: ${err}`);
+                console.error(`🔴 Error saving trivia questions: ${err} 🔴`);
                 reject(err);
             } else {
-                console.log(`Trivia questions saved successfully as ${fileName}`);
-                resolve();
+                console.log(`🟢 Trivia questions saved successfully as ${fileName} 🟢`);
+                fs.readFile(filePath, 'utf-8', (readErr, contents) => {
+                    if (readErr) {
+                        console.error(`🔴 Error reading trivia questions: ${readErr} 🔴`);
+                        reject(readErr);
+                    } else {
+                        console.log(`🟢 Reading ${fileName}: 🟢\n${contents}🟢🟢🟢`);
+                        resolve();
+                    }
+                });
             }
         });
     });

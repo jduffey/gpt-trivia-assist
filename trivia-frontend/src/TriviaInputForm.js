@@ -4,6 +4,7 @@ const TriviaInputForm = ({
     categoryInput,
     setCategoryInput,
     numQuestions,
+    setNumQuestions,
     onSubmit,
     dataLoaded,
 }) => {
@@ -44,7 +45,18 @@ const TriviaInputForm = ({
                 onChange={(e) => setCategoryInput(e.target.value)}
                 className="category-input"
             />
-            <button type="submit" className="generate-btn">{`Generate ${numQuestions} Questions`}</button>
+            <label htmlFor="numQuestions" className="num-questions-label"># Questions:</label>
+            <input
+                id="numQuestions-input"
+                type="number"
+                min="1"
+                value={numQuestions}
+                onChange={(e) => setNumQuestions(Number(e.target.value))}
+                className="num-questions-input"
+            />
+            <button type="submit" className="generate-btn">
+                {`Generate ${numQuestions} Questions`}
+            </button>
             {timerActive && !dataLoaded && <p className="elapsed-time">Elapsed time: {elapsedSeconds} seconds</p>}
         </form>
     );
