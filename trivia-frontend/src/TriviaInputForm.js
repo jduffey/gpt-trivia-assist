@@ -28,6 +28,7 @@ const TriviaInputForm = ({
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        setElapsedSeconds(0);
         setTimerActive(true);
         onSubmit(e);
     };

@@ -13,6 +13,7 @@ const TriviaGenerator = () => {
     const [dataLoaded, setDataLoaded] = useState(false);
 
     const handleSubmit = async (e) => {
+        setDataLoaded(false);
         e.preventDefault();
         setError('');
         setQuestionsByCategory([]);
