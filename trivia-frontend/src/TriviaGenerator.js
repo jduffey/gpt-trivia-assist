@@ -97,16 +97,27 @@ const TriviaGenerator = () => {
 
     const updateDifficulty = (category, questionIndex, newDifficultyValue) => {
         setQuestionsByCategory((prevState) => {
-            const updatedQuestionsByCategory = [...prevState];
-            const categoryIndex = updatedQuestionsByCategory.findIndex(
-                (item) => item.category === category
-            );
-            updatedQuestionsByCategory[categoryIndex].questions[
-                questionIndex
-            ].difficulty = newDifficultyValue;
-            return updatedQuestionsByCategory;
+            return prevState.map((categoryObj) => {
+                if (categoryObj.category === category) {
+                    return {
+                        ...categoryObj,
+                        questions: categoryObj.questions.map((question, index) => {
+                            if (index === questionIndex) {
+                                return {
+                                    ...question,
+                                    difficulty:
+                                        question.difficulty === newDifficultyValue ? undefined : newDifficultyValue,
+                                };
+                            }
+                            return question;
+                        }),
+                    };
+                }
+                return categoryObj;
+            });
         });
-    }
+    };
+
 
     return (
         <div>

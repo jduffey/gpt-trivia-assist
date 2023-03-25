@@ -11,7 +11,7 @@ const EditableQuestionAnswerPair = ({
 }) => {
     return (
         <div className="question-answer-pair">
-            <label htmlFor={`question-${index}`}>Question {index + 1}:</label>
+            <label htmlFor={`question-${index}`}>Question {index}:</label>
             <textarea
                 id={`question-${index}`}
                 value={question}
