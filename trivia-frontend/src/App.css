@@ -28,15 +28,6 @@
     color: #61dafb;
 }
 
-.questions-container {
-    display: flex;
-    flex-direction: column;
-}
-
-.question {
-    margin-bottom: 20px;
-}
-
 @keyframes App-logo-spin {
     from {
         transform: rotate(0deg);
@@ -47,11 +38,6 @@
     }
 }
 
-.selected-difficulty {
-    background-color: #4CAF50;
-    color: white;
-}
-
 .app-container {
     font-family: Arial, sans-serif;
     max-width: 800px;
@@ -59,16 +45,12 @@
     padding: 20px;
     background-color: #f0f0f0;
     border-radius: 10px;
+    box-shadow: 4px 4px 5px rgba(0, 0, 0, 0.5);
 }
 
 .main-title {
     text-align: center;
     color: #2c3e50;
-    margin-bottom: 30px;
-}
-
-.input-form {
-    margin-bottom: 20px;
 }
 
 .error-message {
@@ -84,22 +66,15 @@
     margin-bottom: 20px;
 }
 
-.qa-start,
-.qa-end {
-    font-weight: bold;
-    color: #8e44ad;
-    text-transform: uppercase;
-    margin: 10px 0;
-}
-
 .category {
     margin-bottom: 20px;
 }
 
 .category-title {
-    font-size: 20px;
+    font-size: 28px;
     color: #2980b9;
     margin-bottom: 10px;
+    margin-top: 0px;
 }
 
 .editable-pair {
@@ -110,27 +85,13 @@
     text-align: center;
 }
 
-.save-btn {
-    background-color: #27ae60;
-    color: #ffffff;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    font-size: 16px;
-    cursor: pointer;
-    transition: background-color 0.1s;
-}
-
-.save-btn:hover {
-    background-color: #2ecc71;
-}
-
 .trivia-form {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
     align-items: center;
     gap: 10px;
+    margin: 10px 0;
 }
 
 .category-label {
@@ -186,6 +147,7 @@
     padding: 10px;
     background-color: #f6f6f6;
     border-radius: 5px;
+    box-shadow: 4px 4px 5px rgba(0, 0, 0, 0.5);
 }
 
 .question-label,
@@ -238,4 +200,31 @@
 
 .selected-difficulty:hover {
     background-color: #3498db;
+}
+
+.difficulty-and-index {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.question-index {
+    font-size: 14px;
+    font-weight: bold;
+    color: #2c3e50;
+}
+
+.save-btn {
+    background-color: #27ae60;
+    color: #ffffff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.1s;
+}
+
+.save-btn:hover {
+    background-color: #2ecc71;
 }
