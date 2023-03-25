@@ -34,6 +34,15 @@ const TriviaGenerator = () => {
     };
 
     const handleSave = async () => {
+        const atLeastOneQuestionHasDifficulty = questionsByCategory.some((q) => {
+            return q.questions.some((qaPair) => typeof qaPair.difficulty !== "undefined");
+        });
+
+        if (!atLeastOneQuestionHasDifficulty) {
+            alert('Please assign difficulty to at least one question before saving.');
+            return;
+        }
+
         console.log('Saving trivia questions...');
         try {
             console.log(`React state of questionsByCategory:`)
