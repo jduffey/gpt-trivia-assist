@@ -1,6 +1,14 @@
 import React from 'react';
 
-const EditableQuestionAnswerPair = ({ question, answer, index, onQuestionChange, onAnswerChange, setDifficulty }) => {
+const EditableQuestionAnswerPair = ({
+    question,
+    answer,
+    difficulty,
+    index,
+    onQuestionChange,
+    onAnswerChange,
+    setDifficulty,
+}) => {
     return (
         <div className="question-answer-pair">
             <label htmlFor={`question-${index}`}>Question {index + 1}:</label>
@@ -16,18 +24,21 @@ const EditableQuestionAnswerPair = ({ question, answer, index, onQuestionChange,
                 onChange={(event) => onAnswerChange(index, event.target.value)}
             />
             <button
+                className={difficulty === 0 ? 'selected-difficulty' : ''}
                 id="save-easy"
                 onClick={() => setDifficulty(index, 0)}
             >
                 Easy
             </button>
             <button
+                className={difficulty === 1 ? 'selected-difficulty' : ''}
                 id="save-med"
                 onClick={() => setDifficulty(index, 1)}
             >
                 Medium
             </button>
             <button
+                className={difficulty === 2 ? 'selected-difficulty' : ''}
                 id="save-difficult"
                 onClick={() => setDifficulty(index, 2)}
             >

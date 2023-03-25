@@ -46,3 +46,8 @@
         transform: rotate(360deg);
     }
 }
+
+.selected-difficulty {
+    background-color: #4CAF50;
+    color: white;
+}

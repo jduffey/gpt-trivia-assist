@@ -122,6 +122,7 @@ const TriviaGenerator = () => {
                                     index={index}
                                     question={questionObj.question}
                                     answer={questionObj.answer}
+                                    difficulty={questionObj.difficulty}
                                     onQuestionChange={
                                         (index, value) =>
                                             updateQuestion(categoryObj.category, index, value)
