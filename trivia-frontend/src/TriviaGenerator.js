@@ -120,26 +120,27 @@ const TriviaGenerator = () => {
 
 
     return (
-        <div>
-            <h1>Trivia Generator</h1>
+        <div className="app-container">
+            <h1 className="main-title">Trivia Generator</h1>
             <TriviaInputForm
+                className="input-form"
                 categoryInput={categoryInput}
                 setCategoryInput={setCategoryInput}
                 numQuestions={NUM_QUESTIONS}
                 onSubmit={handleSubmit}
                 dataLoaded={dataLoaded}
             />
-            {error && <p>{error}</p>}
+            {error && <p className="error-message">{error}</p>}
             <div className="questions-container">
-                Q&A's START
                 {
                     questionsByCategory.map((categoryObj) => (
-                        <div key={categoryObj.category}>
-                            <h2>{categoryObj.category}</h2>
+                        <div key={categoryObj.category} className="category">
+                            <h2 className="category-title">{categoryObj.category}</h2>
                             {categoryObj.questions.map((questionObj, index) => (
                                 <EditableQuestionAnswerPair
                                     key={index}
                                     index={index}
+                                    className="editable-pair"
                                     question={questionObj.question}
                                     answer={questionObj.answer}
                                     difficulty={questionObj.difficulty}
@@ -160,14 +161,13 @@ const TriviaGenerator = () => {
                         </div>
                     ))
                 }
-                <br />
-                Q&A's END
             </div>
-            <div>
-                <button onClick={handleSave}>Save TXT</button>
+            <div className="save-btn-container">
+                <button className="save-btn" onClick={handleSave}>Save TXT</button>
             </div>
         </div>
     );
+
 };
 
 export default TriviaGenerator;

@@ -34,18 +34,18 @@ const TriviaInputForm = ({
     };
 
     return (
-        <form onSubmit={handleSubmit}>
-            <label htmlFor="categoryInput">Category:</label>
+        <form onSubmit={handleSubmit} className="trivia-form">
+            <label htmlFor="categoryInput" className="category-label">Category:</label>
             <input
                 id="categoryInput"
                 type="text"
                 placeholder="Category"
                 value={categoryInput}
                 onChange={(e) => setCategoryInput(e.target.value)}
+                className="category-input"
             />
-            <br />
-            <button type="submit">{`Generate ${numQuestions} Questions`}</button>
-            {timerActive && !dataLoaded && <p>Elapsed time: {elapsedSeconds} seconds</p>}
+            <button type="submit" className="generate-btn">{`Generate ${numQuestions} Questions`}</button>
+            {timerActive && !dataLoaded && <p className="elapsed-time">Elapsed time: {elapsedSeconds} seconds</p>}
         </form>
     );
 };
