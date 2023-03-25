@@ -7,7 +7,7 @@ const QUESTION_TYPE = {
     photo: "P",
     sound: "S",
 };
-const TEXT_FONT = "#Courier New#28#True#True#16777215#";
+const TEXT_FONT = "#Palatino Linotype#28#True#False#16777215#";
 const IS_NOT_DAILY_DOUBLE = "N";
 
 function convertToCustomFormat(questionsByCategory) {
