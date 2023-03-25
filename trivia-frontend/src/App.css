@@ -113,6 +113,10 @@
     box-shadow: 0 0 5px rgba(41, 128, 185, 0.5);
 }
 
+.num-questions-input {
+    width: 40px;
+}
+
 .generate-btn {
     background-color: #2980b9;
     color: #ffffff;
