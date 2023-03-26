@@ -1,4 +1,5 @@
 import React from 'react';
+import { TextField, Button, ButtonGroup } from '@mui/material';
 
 const EditableQuestionAnswerPair = ({
     question,
@@ -17,34 +18,43 @@ const EditableQuestionAnswerPair = ({
 
     return (
         <div className="question-answer-pair">
-            <textarea
+            <TextField
                 id={`question-${index}`}
                 value={question}
                 onChange={(event) => onQuestionChange(index, event.target.value)}
+                label={`# ${index}`}
                 className="question-textarea"
-                placeholder={`# ${index}`}
+                variant="outlined"
+                multiline
             />
-            <textarea
+            <TextField
                 id={`answer-${index}`}
                 value={answer}
                 onChange={(event) => onAnswerChange(index, event.target.value)}
+                label="Answer"
                 className="answer-textarea"
-                placeholder="Answer"
+                variant="outlined"
+                multiline
             />
-            <div className="difficulty-and-index">
-                <span className="question-index">Q {index}</span>
-                <div className="difficulty-buttons">
-                    {difficultyLevels.map(({ value, label }) => (
-                        <button
-                            key={value}
-                            className={`difficulty-btn ${difficulty === value ? 'selected-difficulty' : ''}`}
-                            onClick={() => setDifficulty(index, value)}
-                        >
-                            {label}
-                        </button>
-                    ))}
-                </div>
-            </div>
+            <span className="question-index">Q {index}</span>
+            <ButtonGroup variant="contained" aria-label="outlined primary button group">
+                {difficultyLevels.map(({ value, label }) => (
+                    <Button
+                        sx={{
+                            backgroundColor: difficulty === value ? '#3f51b5' : '#fff',
+                            color: difficulty === value ? '#fff' : '#3f51b5',
+                            '&:hover': {
+                                backgroundColor: difficulty === value ? 'lightblue' : 'pink',
+                                transition: '0s',
+                            },
+                        }}
+                        key={value}
+                        onClick={() => setDifficulty(index, value)}
+                    >
+                        {label}
+                    </Button>
+                ))}
+            </ButtonGroup>
         </div>
     );
 };
