@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import Button from '@mui/material/Button';
-import { TextField } from '@mui/material';
+import { Button, LinearProgress, TextField } from '@mui/material';
 
 const TriviaInputForm = ({
     categoryInput,
@@ -60,7 +59,21 @@ const TriviaInputForm = ({
             >
                 {`Generate ${numQuestions} Questions`}
             </Button>
-            {timerActive && !dataLoaded && <p className="elapsed-time">Elapsed time: {elapsedSeconds} seconds</p>}
+            {timerActive && !dataLoaded &&
+                <p className="elapsed-time">
+                    Elapsed time: {elapsedSeconds} seconds
+                    <LinearProgress
+                        variant='indeterminate'
+                        sx={{
+                            width: '25%',
+                            position: 'absolute',
+                            left: '50%',
+                            transform: 'translate(-50%, -50%)',
+                            margin: '2px 0 0 0',
+                        }}
+                    />
+                </p>
+            }
         </form>
     );
 };
