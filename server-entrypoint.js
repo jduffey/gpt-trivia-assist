@@ -3,14 +3,14 @@ const fs = require('fs');
 const path = require('path');
 const { generateTriviaQuestions } = require('./server-utils/generateTriviaQuestions');
 const { convertAndSave } = require('./server-utils/convertAndSave');
-
 const app = express();
-app.use(express.json());
+const PORT = process.env.PORT || 3000;
 
-app.post('/generate', async (req, res) => {
+const handleGenerate = async (req, res) => {
     console.log('Request body sent from client:');
     console.log(req.body);
     const { categoryInput, numQuestions } = req.body;
+
     try {
         const questions = await generateTriviaQuestions(categoryInput, numQuestions);
         res.status(200).json(questions);
@@ -18,9 +18,9 @@ app.post('/generate', async (req, res) => {
         console.error(`Error generating trivia questions: ${error}`);
         res.status(500).json({ message: 'Server error' });
     }
-});
+}
 
-app.post('/save', async (req, res) => {
+const handleSave = async (req, res) => {
     const { categoryNames, questionsByCategory } = req.body;
     const fileName = categoryNames.join('_') + '.txt';
 
@@ -30,9 +30,11 @@ app.post('/save', async (req, res) => {
     } catch (error) {
         res.status(500).json({ message: 'Server error' });
     }
-});
+}
 
-const PORT = process.env.PORT || 3000;
+app.use(express.json());
+app.post('/generate', handleGenerate);
+app.post('/save', handleSave);
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
 });
