@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Button, LinearProgress, TextField } from '@mui/material';
 
 const TriviaInputForm = ({
     categoryInput,
@@ -36,28 +37,43 @@ const TriviaInputForm = ({
 
     return (
         <form onSubmit={handleSubmit} className="trivia-form">
-            <label htmlFor="categoryInput" className="category-label">Category:</label>
-            <input
+            <TextField
                 id="categoryInput"
-                type="text"
-                placeholder="Category"
+                label="Category"
                 value={categoryInput}
                 onChange={(e) => setCategoryInput(e.target.value)}
                 className="category-input"
             />
-            <label htmlFor="numQuestions" className="num-questions-label"># Questions:</label>
-            <input
+            <TextField
                 id="numQuestions-input"
+                label="# Q's"
                 type="number"
-                min="1"
+                inputProps={{ min: "1" }}
                 value={numQuestions}
                 onChange={(e) => setNumQuestions(Number(e.target.value))}
                 className="num-questions-input"
             />
-            <button type="submit" className="generate-btn">
+            <Button
+                variant="contained"
+                type="submit"
+            >
                 {`Generate ${numQuestions} Questions`}
-            </button>
-            {timerActive && !dataLoaded && <p className="elapsed-time">Elapsed time: {elapsedSeconds} seconds</p>}
+            </Button>
+            {timerActive && !dataLoaded &&
+                <p className="elapsed-time">
+                    Elapsed time: {elapsedSeconds} seconds
+                    <LinearProgress
+                        variant='indeterminate'
+                        sx={{
+                            width: '25%',
+                            position: 'absolute',
+                            left: '50%',
+                            transform: 'translate(-50%, -50%)',
+                            margin: '2px 0 0 0',
+                        }}
+                    />
+                </p>
+            }
         </form>
     );
 };
