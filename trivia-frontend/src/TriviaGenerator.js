@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
+import { Button, Container } from '@mui/material';
+
 import EditableQuestionAnswerPair from './EditableQuestionAnswerPair';
 import TriviaInputForm from './TriviaInputForm';
 
@@ -121,7 +123,16 @@ const TriviaGenerator = () => {
 
 
     return (
-        <div className="app-container">
+        <Container
+            sx={{
+                maxWidth: '800px',
+                margin: '0 auto',
+                padding: '20px',
+                backgroundColor: '#f0f0f0',
+                borderRadius: '10px',
+                boxShadow: '4px 4px 5px rgba(0, 0, 0, 0.5)'
+            }}
+        >
             <h1 className="main-title">Trivia Generator</h1>
             <TriviaInputForm
                 className="input-form"
@@ -164,12 +175,25 @@ const TriviaGenerator = () => {
                     ))
                 }
             </div>
-            <div className="save-btn-container">
-                <button className="save-btn" onClick={handleSave}>Save TXT</button>
-            </div>
-        </div>
+            <Button
+                onClick={handleSave}
+                sx={{
+                    backgroundColor: '#27ae60',
+                    color: '#ffffff',
+                    padding: '10px 40px',
+                    border: 'solid 8px #179e50',
+                    borderRadius: '16px',
+                    fontSize: '20px',
+                    transition: 'background-color 0.1s',
+                    '&:hover': {
+                        backgroundColor: '#2ecc71',
+                    }
+                }}
+            >
+                Save TXT
+            </Button>
+        </Container>
     );
-
 };
 
 export default TriviaGenerator;
