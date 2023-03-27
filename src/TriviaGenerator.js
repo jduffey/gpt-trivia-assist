@@ -24,6 +24,13 @@ const TriviaGenerator = () => {
             const response = await axios.post('/generate', { categoryInput, numQuestions: numQuestions });
 
             setQuestionsByCategory((prevState) => {
+                [...prevState].map((categoryObj) => {
+                    categoryObj.questions = categoryObj.questions.filter(
+                        (question) => typeof question.difficulty !== "undefined"
+                    );
+                    return categoryObj;
+                });
+
                 return [
                     ...prevState,
                     {
