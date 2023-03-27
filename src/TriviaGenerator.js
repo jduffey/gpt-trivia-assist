@@ -19,17 +19,20 @@ const TriviaGenerator = () => {
         setDataLoaded(false);
         e.preventDefault();
         setError('');
-        setQuestionsByCategory([]);
 
         try {
             const response = await axios.post('/generate', { categoryInput, numQuestions: numQuestions });
 
-            const newQuestionsByCategory = [{
-                category: categoryInput,
-                questions: response.data,
-            }];
+            setQuestionsByCategory((prevState) => {
+                return [
+                    ...prevState,
+                    {
+                        category: categoryInput,
+                        questions: response.data,
+                    },
+                ];
+            });
 
-            setQuestionsByCategory(newQuestionsByCategory);
             setDataLoaded(true);
         } catch (err) {
             setError('Error generating trivia questions');
