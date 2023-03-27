@@ -1,8 +1,8 @@
 const express = require('express');
 const fs = require('fs');
 const path = require('path');
-const { generateTriviaQuestions } = require('./generateTriviaQuestions');
-const { convertAndSave } = require('./convertAndSave');
+const { generateTriviaQuestions } = require('./server-utils/generateTriviaQuestions');
+const { convertAndSave } = require('./server-utils/convertAndSave');
 
 const app = express();
 app.use(express.json());

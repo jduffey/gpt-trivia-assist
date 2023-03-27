@@ -5,7 +5,7 @@
     "proxy": "http://localhost:3000",
     "main": "generateTriviaQuestions.js",
     "scripts": {
-        "server": "node server.js",
+        "server": "node server-entrypoint.js",
         "client": "PORT=3001 react-scripts start",
         "start": "concurrently \"npm run server\" \"npm run client\"",
         "build": "react-scripts build",
