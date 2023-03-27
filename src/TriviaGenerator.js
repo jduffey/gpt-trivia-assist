@@ -19,17 +19,27 @@ const TriviaGenerator = () => {
         setDataLoaded(false);
         e.preventDefault();
         setError('');
-        setQuestionsByCategory([]);
 
         try {
             const response = await axios.post('/generate', { categoryInput, numQuestions: numQuestions });
 
-            const newQuestionsByCategory = [{
-                category: categoryInput,
-                questions: response.data,
-            }];
+            setQuestionsByCategory((prevState) => {
+                [...prevState].map((categoryObj) => {
+                    categoryObj.questions = categoryObj.questions.filter(
+                        (question) => typeof question.difficulty !== "undefined"
+                    );
+                    return categoryObj;
+                });
 
-            setQuestionsByCategory(newQuestionsByCategory);
+                return [
+                    ...prevState,
+                    {
+                        category: categoryInput,
+                        questions: response.data,
+                    },
+                ];
+            });
+
             setDataLoaded(true);
         } catch (err) {
             setError('Error generating trivia questions');
@@ -98,27 +108,53 @@ const TriviaGenerator = () => {
         });
     };
 
-    const updateDifficulty = (category, questionIndex, newDifficultyValue) => {
-        setQuestionsByCategory((prevState) => {
-            return prevState.map((categoryObj) => {
-                if (categoryObj.category === category) {
-                    return {
-                        ...categoryObj,
-                        questions: categoryObj.questions.map((question, index) => {
-                            if (index === questionIndex) {
-                                return {
-                                    ...question,
-                                    difficulty:
-                                        question.difficulty === newDifficultyValue ? undefined : newDifficultyValue,
-                                };
-                            }
-                            return question;
-                        }),
-                    };
-                }
-                return categoryObj;
-            });
-        });
+    const updateDifficulty = (category, questionIndex, requestedNewDifficultyValue) => {
+        setQuestionsByCategory(
+            (prevState) => {
+                return prevState.map((categoryObj) => {
+                    if (categoryObj.category === category) {
+                        console.log(categoryObj);
+                        const numEasy = categoryObj.questions.filter(
+                            (question) => question.difficulty === 0
+                        ).length;
+                        const numMedium = categoryObj.questions.filter(
+                            (question) => question.difficulty === 1
+                        ).length;
+                        const numDifficult = categoryObj.questions.filter(
+                            (question) => question.difficulty === 2
+                        ).length;
+
+                        return {
+                            ...categoryObj,
+                            questions: categoryObj.questions.map((question, index) => {
+                                if (index === questionIndex) {
+                                    let actualNewDifficultyValue = requestedNewDifficultyValue;
+
+                                    if (question.difficulty === requestedNewDifficultyValue) {
+                                        actualNewDifficultyValue = undefined;
+                                    } else if (
+                                        (requestedNewDifficultyValue === 0 && numEasy >= 2) ||
+                                        (requestedNewDifficultyValue === 1 && numMedium >= 2) ||
+                                        (requestedNewDifficultyValue === 2 && numDifficult >= 1)
+                                    ) {
+                                        alert('You have reached the maximum number of allowed difficulty values for this level.');
+                                        actualNewDifficultyValue = question.difficulty;
+                                    }
+
+                                    return {
+                                        ...question,
+                                        difficulty: actualNewDifficultyValue,
+                                    };
+                                }
+                                return question;
+                            }),
+                        };
+
+                    }
+                    return categoryObj;
+                });
+            }
+        );
     };
 
 
