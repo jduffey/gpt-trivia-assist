@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useCollapse } from 'react-collapsed';
 import axios from 'axios';
 
 import { Button, Container } from '@mui/material';
@@ -14,6 +15,7 @@ const TriviaGenerator = () => {
     const [questionsByCategory, setQuestionsByCategory] = useState([]);
     const [dataLoaded, setDataLoaded] = useState(false);
     const [numQuestions, setNumQuestions] = useState(DEFAULT_NUM_QUESTIONS);
+    const [collapsed, setCollapsed] = useState({});
 
     const handleSubmit = async (e) => {
         setDataLoaded(false);
@@ -180,37 +182,31 @@ const TriviaGenerator = () => {
                 dataLoaded={dataLoaded}
             />
             {error && <p className="error-message">{error}</p>}
-            <div className="questions-container">
-                {
-                    questionsByCategory.map((categoryObj) => (
-                        <div key={categoryObj.category} className="category">
-                            <h2 className="category-title">{categoryObj.category}</h2>
-                            {categoryObj.questions.map((questionObj, index) => (
-                                <EditableQuestionAnswerPair
-                                    key={index}
-                                    index={index}
-                                    className="editable-pair"
-                                    question={questionObj.question}
-                                    answer={questionObj.answer}
-                                    difficulty={questionObj.difficulty}
-                                    onQuestionChange={
-                                        (index, value) =>
-                                            updateQuestion(categoryObj.category, index, value)
-                                    }
-                                    onAnswerChange={
-                                        (index, value) =>
-                                            updateAnswer(categoryObj.category, index, value)
-                                    }
-                                    setDifficulty={
-                                        (index, diffiRank) =>
-                                            updateDifficulty(categoryObj.category, index, diffiRank)
-                                    }
-                                />
-                            ))}
-                        </div>
-                    ))
-                }
-            </div>
+            {questionsByCategory.map((categoryObj, i) => (
+                <div key={i}>
+                    <h3 onClick={() => setCollapsed({ ...collapsed, [categoryObj.category]: !collapsed[categoryObj.category] })}>
+                        {categoryObj.category} {collapsed[categoryObj.category] ? "+" : "-"}
+                    </h3>
+                    {!collapsed[categoryObj.category] && categoryObj.questions.map((qaPair, j) => (
+                        // <QuestionsContainer>
+                        //     {questionsByCategory.map((categoryObj, i) => (
+                        //         <div key={i}>
+                        //             <h3>{categoryObj.category}</h3>
+                        //             {categoryObj.questions.map((qaPair, j) => (
+                        <EditableQuestionAnswerPair
+                            key={j}
+                            category={categoryObj.category}
+                            index={j}
+                            question={qaPair.question}
+                            answer={qaPair.answer}
+                            difficulty={qaPair.difficulty}
+                            onQuestionChange={(index, value) => updateQuestion(categoryObj.category, index, value)}
+                            onAnswerChange={(index, value) => updateAnswer(categoryObj.category, index, value)}
+                            setDifficulty={(index, diffiRank) => updateDifficulty(categoryObj.category, index, diffiRank)}
+                        />
+                    ))}
+                </div>
+            ))}
             <Button
                 onClick={handleSave}
                 sx={{
@@ -231,5 +227,45 @@ const TriviaGenerator = () => {
         </Container>
     );
 };
+
+// from ChatGPT>>>
+//     return (
+//         <Container maxWidth="md">
+//             <TriviaInputForm
+//                 handleSubmit={handleSubmit}
+//                 numQuestions={numQuestions}
+//                 setNumQuestions={setNumQuestions}
+//                 updateQuestion={updateQuestion}
+//                 updateAnswer={updateAnswer}
+//                 updateDifficulty={updateDifficulty}
+//                 questionsByCategory={questionsByCategory}
+//             />
+//             <QuestionsContainer>
+//                 {questionsByCategory.map((categoryObj, i) => (
+//                     <div key={i}>
+//                         <h3>{categoryObj.category}</h3>
+//                         {categoryObj.questions.map((qaPair, j) => (
+//                             <EditableQuestionAnswerPair
+//                                 key={j}
+//                                 category={categoryObj.category}
+//                                 index={j}
+//                                 question={qaPair.question}
+//                                 answer={qaPair.answer}
+//                                 difficulty={qaPair.difficulty}
+//                                 updateQuestion={updateQuestion}
+//                                 updateAnswer={updateAnswer}
+//                                 updateDifficulty={updateDifficulty}
+//                             />
+//                         ))}
+//                     </div>
+//                 ))}
+//             </QuestionsContainer>
+//             <Button variant="contained" onClick={handleSave}>
+//                 Save
+//             </Button>
+//             {error && <p>{error}</p>}
+//         </Container>
+//     );
+// };
 
 export default TriviaGenerator;
