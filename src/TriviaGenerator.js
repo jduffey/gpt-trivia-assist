@@ -188,11 +188,6 @@ const TriviaGenerator = () => {
                         {categoryObj.category} {collapsed[categoryObj.category] ? "+" : "-"}
                     </h3>
                     {!collapsed[categoryObj.category] && categoryObj.questions.map((qaPair, j) => (
-                        // <QuestionsContainer>
-                        //     {questionsByCategory.map((categoryObj, i) => (
-                        //         <div key={i}>
-                        //             <h3>{categoryObj.category}</h3>
-                        //             {categoryObj.questions.map((qaPair, j) => (
                         <EditableQuestionAnswerPair
                             key={j}
                             category={categoryObj.category}
@@ -227,45 +222,5 @@ const TriviaGenerator = () => {
         </Container>
     );
 };
-
-// from ChatGPT>>>
-//     return (
-//         <Container maxWidth="md">
-//             <TriviaInputForm
-//                 handleSubmit={handleSubmit}
-//                 numQuestions={numQuestions}
-//                 setNumQuestions={setNumQuestions}
-//                 updateQuestion={updateQuestion}
-//                 updateAnswer={updateAnswer}
-//                 updateDifficulty={updateDifficulty}
-//                 questionsByCategory={questionsByCategory}
-//             />
-//             <QuestionsContainer>
-//                 {questionsByCategory.map((categoryObj, i) => (
-//                     <div key={i}>
-//                         <h3>{categoryObj.category}</h3>
-//                         {categoryObj.questions.map((qaPair, j) => (
-//                             <EditableQuestionAnswerPair
-//                                 key={j}
-//                                 category={categoryObj.category}
-//                                 index={j}
-//                                 question={qaPair.question}
-//                                 answer={qaPair.answer}
-//                                 difficulty={qaPair.difficulty}
-//                                 updateQuestion={updateQuestion}
-//                                 updateAnswer={updateAnswer}
-//                                 updateDifficulty={updateDifficulty}
-//                             />
-//                         ))}
-//                     </div>
-//                 ))}
-//             </QuestionsContainer>
-//             <Button variant="contained" onClick={handleSave}>
-//                 Save
-//             </Button>
-//             {error && <p>{error}</p>}
-//         </Container>
-//     );
-// };
 
 export default TriviaGenerator;
