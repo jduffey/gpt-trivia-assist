@@ -183,10 +183,11 @@ const TriviaGenerator = () => {
             />
             {error && <p className="error-message">{error}</p>}
             {questionsByCategory.map((categoryObj, i) => (
-                <div key={i}>
+                <div class="categoryTitle" key={i}>
                     <h3 onClick={() => setCollapsed({ ...collapsed, [categoryObj.category]: !collapsed[categoryObj.category] })}>
                         {categoryObj.category} {collapsed[categoryObj.category] ? "+" : "-"}
                     </h3>
+                    <div class="finishedCat">
                     {!collapsed[categoryObj.category] && categoryObj.questions.map((qaPair, j) => (
                         <EditableQuestionAnswerPair
                             key={j}
@@ -200,6 +201,7 @@ const TriviaGenerator = () => {
                             setDifficulty={(index, diffiRank) => updateDifficulty(categoryObj.category, index, diffiRank)}
                         />
                     ))}
+                    </div>
                 </div>
             ))}
             <Button
