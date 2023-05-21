@@ -16,13 +16,13 @@ function convertToCustomFormat(questionsByCategory) {
     questionsByCategory.forEach(categoryObj => {
         const { category, questions } = categoryObj;
 
-        output += category + '\n';
+        output += category + '\r';
 
         questions.forEach(q => {
-            output += q.question + '\n';
-            output += q.answer + ANSWER_TERMINATOR + '\n';
-            output += IS_NOT_DAILY_DOUBLE + '\n';
-            output += QUESTION_TYPE.text + TEXT_FONT + '\n';
+            output += q.question + '\r';
+            output += q.answer + ANSWER_TERMINATOR + '\r';
+            output += IS_NOT_DAILY_DOUBLE + '\r';
+            output += QUESTION_TYPE.text + TEXT_FONT + '\r';
         });
     });
 
