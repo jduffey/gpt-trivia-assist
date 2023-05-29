@@ -9,6 +9,7 @@ const EditableQuestionAnswerPair = ({
     onQuestionChange,
     onAnswerChange,
     setDifficulty,
+    setDailyDouble,
 }) => {
     const difficultyLevels = [
         { value: 0, label: "Easy" },
@@ -54,6 +55,16 @@ const EditableQuestionAnswerPair = ({
                         {label}
                     </Button>
                 ))}
+                <div>
+                    <label>
+                        <input
+                            type="checkbox"
+                            checked={false}
+                            onChange={() => setDailyDouble(index, true)}
+                        />
+                        Daily Double?
+                    </label>
+                </div>
             </ButtonGroup>
         </div>
     );

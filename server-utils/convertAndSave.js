@@ -9,6 +9,7 @@ const QUESTION_TYPE = {
 };
 const TEXT_FONT = "#Palatino Linotype#28#True#False#16777215#";
 const IS_NOT_DAILY_DOUBLE = "N";
+const IS_DAILY_DOUBLE = "Y";
 
 function convertToCustomFormat(questionsByCategory) {
     let output = '';
@@ -16,16 +17,24 @@ function convertToCustomFormat(questionsByCategory) {
     questionsByCategory.forEach(categoryObj => {
         const { category, questions } = categoryObj;
 
-        output += category + '\r';
+        output += category + '\r\n';
 
         questions.forEach(q => {
-            output += q.question + '\r';
-            output += q.answer + ANSWER_TERMINATOR + '\r';
-            output += IS_NOT_DAILY_DOUBLE + '\r';
-            output += QUESTION_TYPE.text + TEXT_FONT + '\r';
+            if (q.isItADailyDouble === false) {
+                output += q.question + '\r\n';
+                output += q.answer + ANSWER_TERMINATOR + '\r\n';
+                output += IS_NOT_DAILY_DOUBLE + '\r\n';
+                output += QUESTION_TYPE.text + TEXT_FONT + '\r\n';
+            }
+            else {
+                output += q.question + '\r\n';
+                output += q.answer + ANSWER_TERMINATOR + '\r\n';
+                output += IS_DAILY_DOUBLE + '\r\n';
+                output += QUESTION_TYPE.text + TEXT_FONT + '\r\n';
+            }
         });
     });
-
+    output += '\r\n^^^\r\n\r\n';
     return output;
 }
 
