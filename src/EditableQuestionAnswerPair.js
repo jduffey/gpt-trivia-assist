@@ -1,5 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Button, ButtonGroup, TextField } from '@mui/material';
+
+const DIFFICULTY_LEVELS = [
+    { value: 0, label: "Easy" },
+    { value: 1, label: "Medium" },
+    { value: 2, label: "Difficult" },
+];
 
 const EditableQuestionAnswerPair = ({
     question,
@@ -11,11 +17,12 @@ const EditableQuestionAnswerPair = ({
     setDifficulty,
     setDailyDouble,
 }) => {
-    const difficultyLevels = [
-        { value: 0, label: "Easy" },
-        { value: 1, label: "Medium" },
-        { value: 2, label: "Difficult" },
-    ];
+    const [isChecked, setIsChecked] = useState(false);
+
+    const handleCheckboxChange = () => {
+        setIsChecked(!isChecked);
+        setDailyDouble(index, !isChecked);
+    }
 
     return (
         <div className="question-answer-pair">
@@ -39,7 +46,7 @@ const EditableQuestionAnswerPair = ({
             />
             <span className="question-index">Q {index}</span>
             <ButtonGroup variant="contained" aria-label="outlined primary button group">
-                {difficultyLevels.map(({ value, label }) => (
+                {DIFFICULTY_LEVELS.map(({ value, label }) => (
                     <Button
                         sx={{
                             backgroundColor: difficulty === value ? '#3f51b5' : '#fff',
@@ -59,8 +66,8 @@ const EditableQuestionAnswerPair = ({
                     <label>
                         <input
                             type="checkbox"
-                            checked={false}
-                            onChange={() => setDailyDouble(index, true)}
+                            checked={isChecked}
+                            onChange={handleCheckboxChange}
                         />
                         Daily Double?
                     </label>
