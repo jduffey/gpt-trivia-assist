@@ -217,8 +217,8 @@ const TriviaGenerator = () => {
                                             updateDifficulty(categoryObj.category, index, diffiRank)
                                     }
                                     setDailyDouble={
-                                        (index) =>
-                                            updateIsDailyDouble()
+                                        (index, isDD) =>
+                                            updateIsDailyDouble(categoryObj.category, index, isDD)
                                     }
                                 />
                             ))}
