@@ -22,18 +22,10 @@ function convertToCustomFormat(questionsByCategory) {
         output += category + CRLF;
 
         questions.forEach(q => {
-            if (q.isItADailyDouble === true) {
-                output += q.question + CRLF;
-                output += q.answer + ANSWER_CARET_TERMINATOR + CRLF;
-                output += IS_DAILY_DOUBLE + CRLF;
-                output += QUESTION_TYPE.text + TEXT_FONT + CRLF;
-            }
-            else {
-                output += q.question + CRLF;
-                output += q.answer + ANSWER_CARET_TERMINATOR + CRLF;
-                output += IS_NOT_DAILY_DOUBLE + CRLF;
-                output += QUESTION_TYPE.text + TEXT_FONT + CRLF;
-            }
+            output += q.question + CRLF;
+            output += q.answer + ANSWER_CARET_TERMINATOR + CRLF;
+            output += (q.isItADailyDouble ? IS_DAILY_DOUBLE : IS_NOT_DAILY_DOUBLE) + CRLF;
+            output += QUESTION_TYPE.text + TEXT_FONT + CRLF;
         });
     });
     output += CRLF + FILE_CARET_TERMINATOR + CRLF + CRLF;
