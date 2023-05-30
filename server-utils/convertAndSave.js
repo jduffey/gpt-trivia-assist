@@ -1,7 +1,8 @@
 const fs = require('fs');
 const path = require('path');
 
-const ANSWER_TERMINATOR = '^^^^';
+const ANSWER_CARET_TERMINATOR = '^^^^';
+const FILE_CARET_TERMINATOR = '^^^';
 const QUESTION_TYPE = {
     text: "T",
     photo: "P",
@@ -10,6 +11,7 @@ const QUESTION_TYPE = {
 const TEXT_FONT = "#Palatino Linotype#28#True#False#16777215#";
 const IS_NOT_DAILY_DOUBLE = "N";
 const IS_DAILY_DOUBLE = "Y";
+const CRLF = '\r\n';
 
 function convertToCustomFormat(questionsByCategory) {
     let output = '';
@@ -17,24 +19,24 @@ function convertToCustomFormat(questionsByCategory) {
     questionsByCategory.forEach(categoryObj => {
         const { category, questions } = categoryObj;
 
-        output += category + '\r\n';
+        output += category + CRLF;
 
         questions.forEach(q => {
             if (q.isItADailyDouble === false) {
-                output += q.question + '\r\n';
-                output += q.answer + ANSWER_TERMINATOR + '\r\n';
-                output += IS_NOT_DAILY_DOUBLE + '\r\n';
-                output += QUESTION_TYPE.text + TEXT_FONT + '\r\n';
+                output += q.question + CRLF;
+                output += q.answer + ANSWER_CARET_TERMINATOR + CRLF;
+                output += IS_NOT_DAILY_DOUBLE + CRLF;
+                output += QUESTION_TYPE.text + TEXT_FONT + CRLF;
             }
             else {
-                output += q.question + '\r\n';
-                output += q.answer + ANSWER_TERMINATOR + '\r\n';
-                output += IS_DAILY_DOUBLE + '\r\n';
-                output += QUESTION_TYPE.text + TEXT_FONT + '\r\n';
+                output += q.question + CRLF;
+                output += q.answer + ANSWER_CARET_TERMINATOR + CRLF;
+                output += IS_DAILY_DOUBLE + CRLF;
+                output += QUESTION_TYPE.text + TEXT_FONT + CRLF;
             }
         });
     });
-    output += '\r\n^^^\r\n\r\n';
+    output += CRLF + FILE_CARET_TERMINATOR + CRLF + CRLF;
     return output;
 }
 
