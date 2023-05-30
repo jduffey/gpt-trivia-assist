@@ -1,17 +1,21 @@
 const fs = require('fs');
 const path = require('path');
 
-const ANSWER_CARET_TERMINATOR = '^^^^';
-const FILE_CARET_TERMINATOR = '^^^';
+const CRLF = '\r\n';
+const CARET_TERMINATOR = {
+    ANSWER: '^^^^',
+    FILE: '^^^',
+};
+const DAILY_DOUBLE = {
+    YES: "Y",
+    NO: "N",
+};
 const QUESTION_TYPE = {
     text: "T",
     photo: "P",
     sound: "S",
 };
 const TEXT_FONT = "#Palatino Linotype#28#True#False#16777215#";
-const IS_NOT_DAILY_DOUBLE = "N";
-const IS_DAILY_DOUBLE = "Y";
-const CRLF = '\r\n';
 
 function convertToCustomFormat(questionsByCategory) {
     let output = '';
@@ -23,12 +27,14 @@ function convertToCustomFormat(questionsByCategory) {
 
         questions.forEach(q => {
             output += q.question + CRLF;
-            output += q.answer + ANSWER_CARET_TERMINATOR + CRLF;
-            output += (q.isItADailyDouble ? IS_DAILY_DOUBLE : IS_NOT_DAILY_DOUBLE) + CRLF;
+            output += q.answer + CARET_TERMINATOR.ANSWER + CRLF;
+            output += (q.isItADailyDouble ? DAILY_DOUBLE.YES : DAILY_DOUBLE.NO) + CRLF;
             output += QUESTION_TYPE.text + TEXT_FONT + CRLF;
         });
     });
-    output += CRLF + FILE_CARET_TERMINATOR + CRLF + CRLF;
+
+    output += CRLF + CARET_TERMINATOR.FILE + CRLF + CRLF;
+
     return output;
 }
 
@@ -39,7 +45,6 @@ function saveCustomFormatFile(data, fileName) {
     }
 
     const filePath = path.join(outputDir, fileName);
-
 
     return new Promise((resolve, reject) => {
         fs.writeFile(filePath, data, (err) => {
