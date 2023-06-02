@@ -149,7 +149,6 @@ const TriviaGenerator = () => {
                                 return question;
                             }),
                         };
-
                     }
                     return categoryObj;
                 });
@@ -157,6 +156,18 @@ const TriviaGenerator = () => {
         );
     };
 
+    const updateIsDailyDouble = (category, questionIndex, newDDStatus) => {
+        setQuestionsByCategory((prevState) => {
+            const updatedQuestionsByCategory = [...prevState];
+            const categoryIndex = updatedQuestionsByCategory.findIndex(
+                (item) => item.category === category
+            );
+            updatedQuestionsByCategory[categoryIndex].questions[
+                questionIndex
+            ].isItADailyDouble = newDDStatus;
+            return updatedQuestionsByCategory;
+        });
+    };
 
     return (
         <Container
@@ -204,6 +215,10 @@ const TriviaGenerator = () => {
                                     setDifficulty={
                                         (index, diffiRank) =>
                                             updateDifficulty(categoryObj.category, index, diffiRank)
+                                    }
+                                    setDailyDouble={
+                                        (index, isDD) =>
+                                            updateIsDailyDouble(categoryObj.category, index, isDD)
                                     }
                                 />
                             ))}
