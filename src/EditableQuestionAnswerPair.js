@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import {
     Button,
     ButtonGroup,
+    Checkbox,
     FormControl,
     FormControlLabel,
     Radio,
@@ -84,17 +85,16 @@ const EditableQuestionAnswerPair = ({
                         {label}
                     </Button>
                 ))}
-                <div>
-                    <label>
-                        <input
-                            type="checkbox"
-                            checked={isChecked}
-                            onChange={handleCheckboxChange}
-                        />
-                        Daily Double?
-                    </label>
-                </div>
             </ButtonGroup>
+            <FormControlLabel
+                control={
+                    <Checkbox
+                        checked={isChecked}
+                        onChange={handleCheckboxChange}
+                    />
+                }
+                label="Daily Double?"
+            />
         </div>
     );
 };
