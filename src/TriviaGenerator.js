@@ -113,7 +113,6 @@ const TriviaGenerator = () => {
             (prevState) => {
                 return prevState.map((categoryObj) => {
                     if (categoryObj.category === category) {
-                        console.log(categoryObj);
                         const numEasy = categoryObj.questions.filter(
                             (question) => question.difficulty === 0
                         ).length;
@@ -169,6 +168,19 @@ const TriviaGenerator = () => {
         });
     };
 
+    const updateQuestionType = (category, questionIndex, newQuestionTypeStatus) => {
+        setQuestionsByCategory((prevState) => {
+            const updatedQuestionsByCategory = [...prevState];
+            const categoryIndex = updatedQuestionsByCategory.findIndex(
+                (item) => item.category === category
+            );
+            updatedQuestionsByCategory[categoryIndex].questions[
+                questionIndex
+            ].questionType = newQuestionTypeStatus;
+            return updatedQuestionsByCategory;
+        });
+    };
+
     return (
         <Container
             sx={{
@@ -219,6 +231,10 @@ const TriviaGenerator = () => {
                                     setDailyDouble={
                                         (index, isDD) =>
                                             updateIsDailyDouble(categoryObj.category, index, isDD)
+                                    }
+                                    setQuestionType={
+                                        (index, questionType) =>
+                                            updateQuestionType(categoryObj.category, index, questionType)
                                     }
                                 />
                             ))}

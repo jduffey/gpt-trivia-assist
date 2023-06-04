@@ -24,6 +24,7 @@ const EditableQuestionAnswerPair = ({
     onAnswerChange,
     setDifficulty,
     setDailyDouble,
+    setQuestionType,
 }) => {
     const [isChecked, setIsChecked] = useState(false);
 
@@ -54,7 +55,13 @@ const EditableQuestionAnswerPair = ({
             />
             <span className="question-index">Q {index}</span>
             <FormControl component="fieldset">
-                <RadioGroup row aria-label="position" name="position" defaultValue="T">
+                <RadioGroup
+                    row
+                    aria-label="position"
+                    name="position"
+                    defaultValue="T"
+                    onChange={(event) => setQuestionType(index, event.target.value)}
+                >
                     <FormControlLabel value="T" control={<Radio color="primary" />} label="T" />
                     <FormControlLabel value="P" control={<Radio color="primary" />} label="P" />
                     <FormControlLabel value="S" control={<Radio color="primary" />} label="S" />
