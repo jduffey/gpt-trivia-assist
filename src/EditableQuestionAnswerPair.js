@@ -55,7 +55,7 @@ const EditableQuestionAnswerPair = ({
                 variant="outlined"
                 multiline
             />
-            <Typography variant="body1">Q {index}</Typography>
+            <Typography variant="body1">Q {index + 1}</Typography>
             <FormControl component="fieldset">
                 <RadioGroup
                     row
