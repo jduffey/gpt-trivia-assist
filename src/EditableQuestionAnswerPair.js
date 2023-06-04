@@ -62,9 +62,9 @@ const EditableQuestionAnswerPair = ({
                     defaultValue="T"
                     onChange={(event) => setQuestionType(index, event.target.value)}
                 >
-                    <FormControlLabel value="T" control={<Radio color="primary" />} label="T" />
-                    <FormControlLabel value="P" control={<Radio color="primary" />} label="P" />
-                    <FormControlLabel value="S" control={<Radio color="primary" />} label="S" />
+                    <FormControlLabel value="T" control={<Radio color="primary" />} label="Text" />
+                    <FormControlLabel value="P" control={<Radio color="primary" />} label="Image" />
+                    <FormControlLabel value="S" control={<Radio color="primary" />} label="Audio" />
                 </RadioGroup>
             </FormControl>
             <ButtonGroup variant="contained" aria-label="outlined primary button group">
