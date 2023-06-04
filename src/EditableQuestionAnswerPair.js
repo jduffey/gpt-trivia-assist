@@ -8,6 +8,7 @@ import {
     Radio,
     RadioGroup,
     TextField,
+    Typography,
 } from '@mui/material';
 
 const DIFFICULTY_LEVELS = [
@@ -54,7 +55,7 @@ const EditableQuestionAnswerPair = ({
                 variant="outlined"
                 multiline
             />
-            <span className="question-index">Q {index}</span>
+            <Typography variant="body1">Q {index}</Typography>
             <FormControl component="fieldset">
                 <RadioGroup
                     row
