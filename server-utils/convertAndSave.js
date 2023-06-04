@@ -11,11 +11,10 @@ const DAILY_DOUBLE = {
     NO: "N",
 };
 const QUESTION_TYPE = {
-    text: "T",
-    photo: "P",
-    sound: "S",
+    T: "T#Palatino Linotype#28#True#False#16777215#",
+    P: "P",
+    S: "S",
 };
-const TEXT_FONT = "#Palatino Linotype#28#True#False#16777215#";
 
 function convertToCustomFormat(questionsByCategory) {
     let output = '';
@@ -29,7 +28,7 @@ function convertToCustomFormat(questionsByCategory) {
             output += q.question + CRLF;
             output += q.answer + CARET_TERMINATOR.ANSWER + CRLF;
             output += (q.isItADailyDouble ? DAILY_DOUBLE.YES : DAILY_DOUBLE.NO) + CRLF;
-            output += QUESTION_TYPE.text + TEXT_FONT + CRLF;
+            output += (q.questionType ? QUESTION_TYPE[q.questionType] : QUESTION_TYPE.T) + CRLF;
         });
     });
 
