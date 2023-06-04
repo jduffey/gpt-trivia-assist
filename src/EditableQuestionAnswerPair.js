@@ -1,5 +1,13 @@
 import React, { useState } from 'react';
-import { Button, ButtonGroup, TextField } from '@mui/material';
+import {
+    Button,
+    ButtonGroup,
+    FormControl,
+    FormControlLabel,
+    Radio,
+    RadioGroup,
+    TextField,
+} from '@mui/material';
 
 const DIFFICULTY_LEVELS = [
     { value: 0, label: "Easy" },
@@ -45,6 +53,13 @@ const EditableQuestionAnswerPair = ({
                 multiline
             />
             <span className="question-index">Q {index}</span>
+            <FormControl component="fieldset">
+                <RadioGroup row aria-label="position" name="position" defaultValue="T">
+                    <FormControlLabel value="T" control={<Radio color="primary" />} label="T" />
+                    <FormControlLabel value="P" control={<Radio color="primary" />} label="P" />
+                    <FormControlLabel value="S" control={<Radio color="primary" />} label="S" />
+                </RadioGroup>
+            </FormControl>
             <ButtonGroup variant="contained" aria-label="outlined primary button group">
                 {DIFFICULTY_LEVELS.map(({ value, label }) => (
                     <Button
