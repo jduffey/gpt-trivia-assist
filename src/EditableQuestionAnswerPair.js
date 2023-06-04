@@ -40,7 +40,7 @@ const EditableQuestionAnswerPair = ({
                 id={`question-${index}`}
                 value={question}
                 onChange={(event) => onQuestionChange(index, event.target.value)}
-                label={`# ${index}`}
+                label="Question"
                 className="question-textarea"
                 variant="outlined"
                 multiline
