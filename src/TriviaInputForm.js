@@ -10,6 +10,8 @@ import {
 } from '@mui/material';
 
 const TriviaInputForm = ({
+    categoryType,
+    setCategoryType,
     categoryInput,
     setCategoryInput,
     numQuestions,
@@ -17,6 +19,8 @@ const TriviaInputForm = ({
     onSubmit,
     dataLoaded,
 }) => {
+    console.log("TriviaInputForm categoryType:", categoryType);
+
     const [elapsedSeconds, setElapsedSeconds] = useState(0);
     const [timerActive, setTimerActive] = useState(false);
 
@@ -50,8 +54,8 @@ const TriviaInputForm = ({
                     row
                     aria-label="position"
                     name="position"
-                    defaultValue="T"
-                    // onChange={(event) => setQuestionType(index, event.target.value)}
+                    value={categoryType}
+                    onChange={(event) => setCategoryType(event.target.value)}
                 >
                     <FormControlLabel value="T" control={<Radio color="primary" />} label="Text" />
                     <FormControlLabel value="P" control={<Radio color="primary" />} label="Image" />

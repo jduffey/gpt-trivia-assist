@@ -10,6 +10,7 @@ const DEFAULT_NUM_QUESTIONS = 7;
 
 const TriviaGenerator = () => {
     const [error, setError] = useState('');
+    const [categoryType, setCategoryType] = useState('T');
     const [categoryInput, setCategoryInput] = useState('');
     const [questionsByCategory, setQuestionsByCategory] = useState([]);
     const [dataLoaded, setDataLoaded] = useState(false);
@@ -35,6 +36,7 @@ const TriviaGenerator = () => {
                     ...prevState,
                     {
                         category: categoryInput,
+                        categoryType,
                         questions: response.data,
                     },
                 ];
@@ -195,6 +197,8 @@ const TriviaGenerator = () => {
             <h1 className="main-title">Trivia Generator</h1>
             <TriviaInputForm
                 className="input-form"
+                categoryType={categoryType}
+                setCategoryType={setCategoryType}
                 categoryInput={categoryInput}
                 setCategoryInput={setCategoryInput}
                 numQuestions={numQuestions}
