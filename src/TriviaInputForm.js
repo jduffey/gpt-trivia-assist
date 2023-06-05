@@ -1,5 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { Button, LinearProgress, TextField } from '@mui/material';
+import {
+    Button,
+    FormControl,
+    FormControlLabel,
+    LinearProgress,
+    Radio,
+    RadioGroup,
+    TextField
+} from '@mui/material';
 
 const TriviaInputForm = ({
     categoryInput,
@@ -37,6 +45,19 @@ const TriviaInputForm = ({
 
     return (
         <form onSubmit={handleSubmit} className="trivia-form">
+            <FormControl component="fieldset">
+                <RadioGroup
+                    row
+                    aria-label="position"
+                    name="position"
+                    defaultValue="T"
+                    // onChange={(event) => setQuestionType(index, event.target.value)}
+                >
+                    <FormControlLabel value="T" control={<Radio color="primary" />} label="Text" />
+                    <FormControlLabel value="P" control={<Radio color="primary" />} label="Image" />
+                    <FormControlLabel value="S" control={<Radio color="primary" />} label="Audio" />
+                </RadioGroup>
+            </FormControl>
             <TextField
                 id="categoryInput"
                 label="Category"
