@@ -17,6 +17,13 @@ const TriviaGenerator = () => {
     const [numQuestions, setNumQuestions] = useState(DEFAULT_NUM_QUESTIONS);
 
     const handleSubmit = async (e) => {
+        console.log("Submit button w/ category type:", categoryType);
+
+        if (categoryType !== 'T') {
+            console.log('Need to create 5 blank pairs');
+            return;
+        }
+
         setDataLoaded(false);
         e.preventDefault();
         setError('');

@@ -19,8 +19,6 @@ const TriviaInputForm = ({
     onSubmit,
     dataLoaded,
 }) => {
-    console.log("TriviaInputForm categoryType:", categoryType);
-
     const [elapsedSeconds, setElapsedSeconds] = useState(0);
     const [timerActive, setTimerActive] = useState(false);
 
@@ -43,7 +41,9 @@ const TriviaInputForm = ({
     const handleSubmit = (e) => {
         e.preventDefault();
         setElapsedSeconds(0);
-        setTimerActive(true);
+        if (categoryType === 'T') {
+            setTimerActive(true)
+        };
         onSubmit(e);
     };
 
