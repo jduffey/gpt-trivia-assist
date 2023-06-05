@@ -71,6 +71,7 @@ const TriviaInputForm = ({
             />
             <TextField
                 id="numQuestions-input"
+                disabled={categoryType !== 'T'}
                 label="# Q's"
                 type="number"
                 inputProps={{ min: "1" }}
