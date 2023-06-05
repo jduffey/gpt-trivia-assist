@@ -75,7 +75,7 @@ const TriviaInputForm = ({
                 label="# Q's"
                 type="number"
                 inputProps={{ min: "1" }}
-                value={numQuestions}
+                value={categoryType === 'T' ? numQuestions : 5}
                 onChange={(e) => setNumQuestions(Number(e.target.value))}
                 className="num-questions-input"
             />
@@ -83,7 +83,9 @@ const TriviaInputForm = ({
                 variant="contained"
                 type="submit"
             >
-                {`Generate ${numQuestions} Questions`}
+                {categoryType === 'T' ?
+                    `Generate ${numQuestions} Questions`
+                    : 'Create 5 Blank Pairs'}
             </Button>
             {timerActive && !dataLoaded &&
                 <p className="elapsed-time">
