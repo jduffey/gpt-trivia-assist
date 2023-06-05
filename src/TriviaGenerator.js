@@ -18,19 +18,11 @@ const TriviaGenerator = () => {
 
     const handleSubmit = async (e) => {
         console.log("Submit button w/ category type:", categoryType);
-
-        if (categoryType !== 'T') {
-            console.log('Need to create 5 blank pairs');
-            return;
-        }
-
         setDataLoaded(false);
         e.preventDefault();
         setError('');
 
-        try {
-            const response = await axios.post('/generate', { categoryInput, numQuestions: numQuestions });
-
+        if (categoryType !== 'T') {
             setQuestionsByCategory((prevState) => {
                 [...prevState].map((categoryObj) => {
                     categoryObj.questions = categoryObj.questions.filter(
@@ -44,14 +36,45 @@ const TriviaGenerator = () => {
                     {
                         category: categoryInput,
                         categoryType,
-                        questions: response.data,
+                        questions: [
+                            { question: '', answer: '' },
+                            { question: '', answer: '' },
+                            { question: '', answer: '' },
+                            { question: '', answer: '' },
+                            { question: '', answer: '' },
+                        ],
                     },
                 ];
             });
 
             setDataLoaded(true);
-        } catch (err) {
-            setError('Error generating trivia questions');
+        } else {
+            try {
+                const response = await axios.post('/generate', { categoryInput, numQuestions: numQuestions });
+                console.log(response.data);
+
+                setQuestionsByCategory((prevState) => {
+                    [...prevState].map((categoryObj) => {
+                        categoryObj.questions = categoryObj.questions.filter(
+                            (question) => typeof question.difficulty !== "undefined"
+                        );
+                        return categoryObj;
+                    });
+
+                    return [
+                        ...prevState,
+                        {
+                            category: categoryInput,
+                            categoryType,
+                            questions: response.data,
+                        },
+                    ];
+                });
+
+                setDataLoaded(true);
+            } catch (err) {
+                setError('Error generating trivia questions');
+            }
         }
     };
 
