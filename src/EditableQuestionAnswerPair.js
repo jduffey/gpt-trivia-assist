@@ -2,11 +2,13 @@ import React, { useState } from 'react';
 import {
     Button,
     ButtonGroup,
+    Checkbox,
     FormControl,
     FormControlLabel,
     Radio,
     RadioGroup,
     TextField,
+    Typography,
 } from '@mui/material';
 
 const DIFFICULTY_LEVELS = [
@@ -39,7 +41,7 @@ const EditableQuestionAnswerPair = ({
                 id={`question-${index}`}
                 value={question}
                 onChange={(event) => onQuestionChange(index, event.target.value)}
-                label={`# ${index}`}
+                label="Question"
                 className="question-textarea"
                 variant="outlined"
                 multiline
@@ -53,7 +55,7 @@ const EditableQuestionAnswerPair = ({
                 variant="outlined"
                 multiline
             />
-            <span className="question-index">Q {index}</span>
+            <Typography variant="body1">Q {index + 1}</Typography>
             <FormControl component="fieldset">
                 <RadioGroup
                     row
@@ -84,17 +86,16 @@ const EditableQuestionAnswerPair = ({
                         {label}
                     </Button>
                 ))}
-                <div>
-                    <label>
-                        <input
-                            type="checkbox"
-                            checked={isChecked}
-                            onChange={handleCheckboxChange}
-                        />
-                        Daily Double?
-                    </label>
-                </div>
             </ButtonGroup>
+            <FormControlLabel
+                control={
+                    <Checkbox
+                        checked={isChecked}
+                        onChange={handleCheckboxChange}
+                    />
+                }
+                label="Daily Double?"
+            />
         </div>
     );
 };
