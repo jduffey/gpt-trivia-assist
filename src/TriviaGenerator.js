@@ -94,7 +94,7 @@ const TriviaGenerator = () => {
         }
     };
 
-    const updateQuestion = (category, questionIndex, newQuestionValue) => {
+    const updateQuestionAttribute = (category, questionIndex, attribute, newValue) => {
         setQuestionsByCategory((prevState) => {
             const updatedQuestionsByCategory = [...prevState];
             const categoryIndex = updatedQuestionsByCategory.findIndex(
@@ -102,20 +102,7 @@ const TriviaGenerator = () => {
             );
             updatedQuestionsByCategory[categoryIndex].questions[
                 questionIndex
-            ].question = newQuestionValue;
-            return updatedQuestionsByCategory;
-        });
-    };
-
-    const updateAnswer = (category, questionIndex, newAnswerValue) => {
-        setQuestionsByCategory((prevState) => {
-            const updatedQuestionsByCategory = [...prevState];
-            const categoryIndex = updatedQuestionsByCategory.findIndex(
-                (item) => item.category === category
-            );
-            updatedQuestionsByCategory[categoryIndex].questions[
-                questionIndex
-            ].answer = newAnswerValue;
+            ][attribute] = newValue;
             return updatedQuestionsByCategory;
         });
     };
@@ -167,32 +154,6 @@ const TriviaGenerator = () => {
         );
     };
 
-    const updateIsDailyDouble = (category, questionIndex, newDDStatus) => {
-        setQuestionsByCategory((prevState) => {
-            const updatedQuestionsByCategory = [...prevState];
-            const categoryIndex = updatedQuestionsByCategory.findIndex(
-                (item) => item.category === category
-            );
-            updatedQuestionsByCategory[categoryIndex].questions[
-                questionIndex
-            ].isItADailyDouble = newDDStatus;
-            return updatedQuestionsByCategory;
-        });
-    };
-
-    const updateQuestionType = (category, questionIndex, newQuestionTypeStatus) => {
-        setQuestionsByCategory((prevState) => {
-            const updatedQuestionsByCategory = [...prevState];
-            const categoryIndex = updatedQuestionsByCategory.findIndex(
-                (item) => item.category === category
-            );
-            updatedQuestionsByCategory[categoryIndex].questions[
-                questionIndex
-            ].questionType = newQuestionTypeStatus;
-            return updatedQuestionsByCategory;
-        });
-    };
-
     return (
         <Container
             sx={{
@@ -233,11 +194,11 @@ const TriviaGenerator = () => {
                                     difficulty={questionObj.difficulty}
                                     onQuestionChange={
                                         (index, value) =>
-                                            updateQuestion(categoryObj.category, index, value)
+                                            updateQuestionAttribute(categoryObj.category, index, 'question', value)
                                     }
                                     onAnswerChange={
                                         (index, value) =>
-                                            updateAnswer(categoryObj.category, index, value)
+                                            updateQuestionAttribute(categoryObj.category, index, 'answer', value)
                                     }
                                     setDifficulty={
                                         (index, diffiRank) =>
@@ -245,11 +206,11 @@ const TriviaGenerator = () => {
                                     }
                                     setDailyDouble={
                                         (index, isDD) =>
-                                            updateIsDailyDouble(categoryObj.category, index, isDD)
+                                            updateQuestionAttribute(categoryObj.category, index, 'isItADailyDouble', isDD)
                                     }
                                     setQuestionType={
                                         (index, qType) =>
-                                            updateQuestionType(categoryObj.category, index, qType)
+                                            updateQuestionAttribute(categoryObj.category, index, 'questionType', qType)
                                     }
                                 />
                             ))}
