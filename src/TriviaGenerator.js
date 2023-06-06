@@ -35,13 +35,12 @@ const TriviaGenerator = () => {
                     ...prevState,
                     {
                         category: categoryInput,
-                        categoryType,
                         questions: [
-                            { question: '', answer: '' },
-                            { question: '', answer: '' },
-                            { question: '', answer: '' },
-                            { question: '', answer: '' },
-                            { question: '', answer: '' },
+                            { question: '', answer: '', questionType: categoryType },
+                            { question: '', answer: '', questionType: categoryType },
+                            { question: '', answer: '', questionType: categoryType },
+                            { question: '', answer: '', questionType: categoryType },
+                            { question: '', answer: '', questionType: categoryType },
                         ],
                     },
                 ];
@@ -65,8 +64,12 @@ const TriviaGenerator = () => {
                         ...prevState,
                         {
                             category: categoryInput,
-                            categoryType,
-                            questions: response.data,
+                            questions: response.data.map((qaPair) => {
+                                return {
+                                    ...qaPair,
+                                    questionType: categoryType,
+                                };
+                            }),
                         },
                     ];
                 });
@@ -247,6 +250,7 @@ const TriviaGenerator = () => {
                                     key={index}
                                     index={index}
                                     className="editable-pair"
+                                    categoryType={questionObj.questionType}
                                     question={questionObj.question}
                                     answer={questionObj.answer}
                                     difficulty={questionObj.difficulty}
@@ -267,8 +271,8 @@ const TriviaGenerator = () => {
                                             updateIsDailyDouble(categoryObj.category, index, isDD)
                                     }
                                     setQuestionType={
-                                        (index, questionType) =>
-                                            updateQuestionType(categoryObj.category, index, questionType)
+                                        (index, qType) =>
+                                            updateQuestionType(categoryObj.category, index, qType)
                                     }
                                 />
                             ))}
