@@ -58,6 +58,17 @@ const EditableQuestionAnswerPair = ({
                 multiline
             />
             <Typography variant="body1">Q {index + 1}</Typography>
+            <Button
+                sx={{
+                    backgroundColor: '#3f51b5',
+                    color: '#fff',
+                    '&:hover': {
+                        backgroundColor: 'pink',
+                        transition: '0s',
+                    },
+                }}>
+                Upload
+            </Button>
             <FormControl component="fieldset">
                 <RadioGroup
                     row
