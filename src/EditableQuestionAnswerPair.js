@@ -18,6 +18,7 @@ const DIFFICULTY_LEVELS = [
 ];
 
 const EditableQuestionAnswerPair = ({
+    categoryType,
     question,
     answer,
     difficulty,
@@ -61,7 +62,7 @@ const EditableQuestionAnswerPair = ({
                     row
                     aria-label="position"
                     name="position"
-                    defaultValue="T"
+                    value={categoryType}
                     onChange={(event) => setQuestionType(index, event.target.value)}
                 >
                     <FormControlLabel value="T" control={<Radio color="primary" />} label="Text" />

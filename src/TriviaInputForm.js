@@ -1,7 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import { Button, LinearProgress, TextField } from '@mui/material';
+import {
+    Button,
+    FormControl,
+    FormControlLabel,
+    LinearProgress,
+    Radio,
+    RadioGroup,
+    TextField
+} from '@mui/material';
 
 const TriviaInputForm = ({
+    categoryType,
+    setCategoryType,
     categoryInput,
     setCategoryInput,
     numQuestions,
@@ -31,12 +41,27 @@ const TriviaInputForm = ({
     const handleSubmit = (e) => {
         e.preventDefault();
         setElapsedSeconds(0);
-        setTimerActive(true);
+        if (categoryType === 'T') {
+            setTimerActive(true)
+        };
         onSubmit(e);
     };
 
     return (
         <form onSubmit={handleSubmit} className="trivia-form">
+            <FormControl component="fieldset">
+                <RadioGroup
+                    row
+                    aria-label="position"
+                    name="position"
+                    value={categoryType}
+                    onChange={(event) => setCategoryType(event.target.value)}
+                >
+                    <FormControlLabel value="T" control={<Radio color="primary" />} label="Text" />
+                    <FormControlLabel value="P" control={<Radio color="primary" />} label="Image" />
+                    <FormControlLabel value="S" control={<Radio color="primary" />} label="Audio" />
+                </RadioGroup>
+            </FormControl>
             <TextField
                 id="categoryInput"
                 label="Category"
@@ -46,10 +71,11 @@ const TriviaInputForm = ({
             />
             <TextField
                 id="numQuestions-input"
+                disabled={categoryType !== 'T'}
                 label="# Q's"
                 type="number"
                 inputProps={{ min: "1" }}
-                value={numQuestions}
+                value={categoryType === 'T' ? numQuestions : 5}
                 onChange={(e) => setNumQuestions(Number(e.target.value))}
                 className="num-questions-input"
             />
@@ -57,7 +83,9 @@ const TriviaInputForm = ({
                 variant="contained"
                 type="submit"
             >
-                {`Generate ${numQuestions} Questions`}
+                {categoryType === 'T' ?
+                    `Generate ${numQuestions} Questions`
+                    : 'Create 5 Blank Pairs'}
             </Button>
             {timerActive && !dataLoaded &&
                 <p className="elapsed-time">
