@@ -37,6 +37,10 @@ const EditableQuestionAnswerPair = ({
         setDailyDouble(index, !isChecked);
     }
 
+    const handleImageUploadClick = () => {
+        alert("You clicked the UPLOAD button!");
+    }
+
     return (
         <div className="question-answer-pair">
             <TextField
@@ -66,7 +70,8 @@ const EditableQuestionAnswerPair = ({
                         backgroundColor: 'pink',
                         transition: '0s',
                     },
-                }}>
+                }}
+                onClick={handleImageUploadClick}>
                 Upload
             </Button>
             <FormControl component="fieldset">
