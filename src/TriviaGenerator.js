@@ -249,40 +249,38 @@ const TriviaGenerator = () => {
                             <h3 onClick={() => setCollapsed({ ...collapsed, [categoryObj.category]: !collapsed[categoryObj.category] })}>
                                 {categoryObj.category} {collapsed[categoryObj.category] ? "+" : "-"}
                             </h3>
-                            <div className="finishedCat">
-                                {!collapsed[categoryObj.category] && categoryObj.questions.map((questionObj, index) => (
-                                    <EditableQuestionAnswerPair
-                                        key={index}
-                                        index={index}
-                                        className="editable-pair"
-                                        categoryType={questionObj.questionType}
-                                        question={questionObj.question}
-                                        answer={questionObj.answer}
-                                        difficulty={questionObj.difficulty}
-                                        isDD={questionObj.isDD}
-                                        onQuestionChange={
-                                            (index, value) =>
-                                                updateQuestion(categoryObj.category, index, value)
-                                        }
-                                        onAnswerChange={
-                                            (index, value) =>
-                                                updateAnswer(categoryObj.category, index, value)
-                                        }
-                                        setDifficulty={
-                                            (index, diffiRank) =>
-                                                updateDifficulty(categoryObj.category, index, diffiRank)
-                                        }
-                                        setDailyDouble={
-                                            (index, isDD) =>
-                                                updateIsDailyDouble(categoryObj.category, index, isDD)
-                                        }
-                                        setQuestionType={
-                                            (index, qType) =>
-                                                updateQuestionType(categoryObj.category, index, qType)
-                                        }
-                                    />
-                                ))}
-                            </div>
+                            {!collapsed[categoryObj.category] && categoryObj.questions.map((questionObj, index) => (
+                                <EditableQuestionAnswerPair
+                                    key={index}
+                                    index={index}
+                                    className="editable-pair"
+                                    categoryType={questionObj.questionType}
+                                    question={questionObj.question}
+                                    answer={questionObj.answer}
+                                    difficulty={questionObj.difficulty}
+                                    isDD={questionObj.isDD}
+                                    onQuestionChange={
+                                        (index, value) =>
+                                            updateQuestion(categoryObj.category, index, value)
+                                    }
+                                    onAnswerChange={
+                                        (index, value) =>
+                                            updateAnswer(categoryObj.category, index, value)
+                                    }
+                                    setDifficulty={
+                                        (index, diffiRank) =>
+                                            updateDifficulty(categoryObj.category, index, diffiRank)
+                                    }
+                                    setDailyDouble={
+                                        (index, isDD) =>
+                                            updateIsDailyDouble(categoryObj.category, index, isDD)
+                                    }
+                                    setQuestionType={
+                                        (index, qType) =>
+                                            updateQuestionType(categoryObj.category, index, qType)
+                                    }
+                                />
+                            ))}
                         </div>
                     ))
                 }
