@@ -38,8 +38,17 @@ const EditableQuestionAnswerPair = ({
     }
 
     const handleImageUploadClick = () => {
-        alert("You clicked the UPLOAD button!");
-    }
+        const input = document.createElement("input");
+        input.type = "file";
+        input.accept = "image/*";
+
+        input.onchange = (event) => {
+            const file = event.target.files[0];
+            console.log("Selected file:", file.name);
+        };
+
+        input.click();
+    };
 
     return (
         <div className="question-answer-pair">
