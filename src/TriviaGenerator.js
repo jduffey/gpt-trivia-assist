@@ -15,6 +15,7 @@ const TriviaGenerator = () => {
     const [questionsByCategory, setQuestionsByCategory] = useState([]);
     const [dataLoaded, setDataLoaded] = useState(false);
     const [numQuestions, setNumQuestions] = useState(DEFAULT_NUM_QUESTIONS);
+    const [collapsed, setCollapsed] = useState({});
 
     const handleSubmit = async (e) => {
         console.log("Submit button w/ category type:", categoryType);
@@ -36,11 +37,11 @@ const TriviaGenerator = () => {
                     {
                         category: categoryInput,
                         questions: [
-                            { question: '', answer: '', questionType: categoryType },
-                            { question: '', answer: '', questionType: categoryType },
-                            { question: '', answer: '', questionType: categoryType },
-                            { question: '', answer: '', questionType: categoryType },
-                            { question: '', answer: '', questionType: categoryType },
+                            { question: '', answer: '', questionType: categoryType, isDD: false },
+                            { question: '', answer: '', questionType: categoryType, isDD: false },
+                            { question: '', answer: '', questionType: categoryType, isDD: false },
+                            { question: '', answer: '', questionType: categoryType, isDD: false },
+                            { question: '', answer: '', questionType: categoryType, isDD: false },
                         ],
                     },
                 ];
@@ -68,6 +69,7 @@ const TriviaGenerator = () => {
                                 return {
                                     ...qaPair,
                                     questionType: categoryType,
+                                    isDD: false,
                                 };
                             }),
                         },
@@ -198,7 +200,7 @@ const TriviaGenerator = () => {
             );
             updatedQuestionsByCategory[categoryIndex].questions[
                 questionIndex
-            ].isItADailyDouble = newDDStatus;
+            ].isDD = newDDStatus;
             return updatedQuestionsByCategory;
         });
     };
@@ -244,8 +246,10 @@ const TriviaGenerator = () => {
                 {
                     questionsByCategory.map((categoryObj) => (
                         <div key={categoryObj.category} className="category">
-                            <h2 className="category-title">{categoryObj.category}</h2>
-                            {categoryObj.questions.map((questionObj, index) => (
+                            <h3 onClick={() => setCollapsed({ ...collapsed, [categoryObj.category]: !collapsed[categoryObj.category] })}>
+                                {categoryObj.category} {collapsed[categoryObj.category] ? "+" : "-"}
+                            </h3>
+                            {!collapsed[categoryObj.category] && categoryObj.questions.map((questionObj, index) => (
                                 <EditableQuestionAnswerPair
                                     key={index}
                                     index={index}
@@ -254,6 +258,7 @@ const TriviaGenerator = () => {
                                     question={questionObj.question}
                                     answer={questionObj.answer}
                                     difficulty={questionObj.difficulty}
+                                    isDD={questionObj.isDD}
                                     onQuestionChange={
                                         (index, value) =>
                                             updateQuestion(categoryObj.category, index, value)
@@ -297,7 +302,7 @@ const TriviaGenerator = () => {
             >
                 Save TXT
             </Button>
-        </Container>
+        </Container >
     );
 };
 

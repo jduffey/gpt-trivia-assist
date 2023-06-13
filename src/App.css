@@ -232,3 +232,14 @@
 .save-btn:hover {
     background-color: #2ecc71;
 }
+
+.collapsible .content {
+    padding: 6px;
+    background-color: #eeeeee;
+}
+
+.collapsible .header {
+    background-color: #dddddd;
+    padding: 60px;
+    cursor: pointer;
+}
