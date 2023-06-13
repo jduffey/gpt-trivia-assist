@@ -45,6 +45,7 @@ const EditableQuestionAnswerPair = ({
         input.onchange = (event) => {
             const file = event.target.files[0];
             console.log("Selected file:", file.name);
+            onQuestionChange(index, file.name);
         };
 
         input.click();
