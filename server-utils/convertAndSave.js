@@ -27,7 +27,7 @@ function convertToCustomFormat(questionsByCategory) {
         questions.forEach(q => {
             output += q.question + CRLF;
             output += q.answer + CARET_TERMINATOR.ANSWER + CRLF;
-            output += (q.isItADailyDouble ? DAILY_DOUBLE.YES : DAILY_DOUBLE.NO) + CRLF;
+            output += (q.isDD ? DAILY_DOUBLE.YES : DAILY_DOUBLE.NO) + CRLF;
             output += (q.questionType ? QUESTION_TYPE[q.questionType] : QUESTION_TYPE.T) + CRLF;
         });
     });

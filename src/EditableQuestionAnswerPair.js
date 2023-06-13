@@ -22,6 +22,7 @@ const EditableQuestionAnswerPair = ({
     question,
     answer,
     difficulty,
+    isDD,
     index,
     onQuestionChange,
     onAnswerChange,
@@ -91,7 +92,7 @@ const EditableQuestionAnswerPair = ({
             <FormControlLabel
                 control={
                     <Checkbox
-                        checked={isChecked}
+                        checked={isDD}
                         onChange={handleCheckboxChange}
                     />
                 }

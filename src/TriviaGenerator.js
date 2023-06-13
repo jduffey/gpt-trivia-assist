@@ -37,11 +37,11 @@ const TriviaGenerator = () => {
                     {
                         category: categoryInput,
                         questions: [
-                            { question: '', answer: '', questionType: categoryType },
-                            { question: '', answer: '', questionType: categoryType },
-                            { question: '', answer: '', questionType: categoryType },
-                            { question: '', answer: '', questionType: categoryType },
-                            { question: '', answer: '', questionType: categoryType },
+                            { question: '', answer: '', questionType: categoryType, isDD: false },
+                            { question: '', answer: '', questionType: categoryType, isDD: false },
+                            { question: '', answer: '', questionType: categoryType, isDD: false },
+                            { question: '', answer: '', questionType: categoryType, isDD: false },
+                            { question: '', answer: '', questionType: categoryType, isDD: false },
                         ],
                     },
                 ];
@@ -69,6 +69,7 @@ const TriviaGenerator = () => {
                                 return {
                                     ...qaPair,
                                     questionType: categoryType,
+                                    isDD: false,
                                 };
                             }),
                         },
@@ -199,7 +200,7 @@ const TriviaGenerator = () => {
             );
             updatedQuestionsByCategory[categoryIndex].questions[
                 questionIndex
-            ].isItADailyDouble = newDDStatus;
+            ].isDD = newDDStatus;
             return updatedQuestionsByCategory;
         });
     };
@@ -258,6 +259,7 @@ const TriviaGenerator = () => {
                                         question={questionObj.question}
                                         answer={questionObj.answer}
                                         difficulty={questionObj.difficulty}
+                                        isDD={questionObj.isDD}
                                         onQuestionChange={
                                             (index, value) =>
                                                 updateQuestion(categoryObj.category, index, value)
