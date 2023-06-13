@@ -17,6 +17,7 @@ const TriviaGenerator = () => {
     const [numQuestions, setNumQuestions] = useState(DEFAULT_NUM_QUESTIONS);
 
     const handleSubmit = async (e) => {
+        console.log("Submit button w/ category type:", categoryType);
         setDataLoaded(false);
         e.preventDefault();
         setError('');
@@ -200,16 +201,16 @@ const TriviaGenerator = () => {
                                             updateQuestionAttribute(categoryObj.category, index, 'answer', value)
                                     }
                                     setDifficulty={
-                                        (index, value) =>
-                                            updateDifficulty(categoryObj.category, index, value)
+                                        (index, diffiRank) =>
+                                            updateDifficulty(categoryObj.category, index, diffiRank)
                                     }
                                     setDailyDouble={
-                                        (index, value) =>
-                                            updateQuestionAttribute(categoryObj.category, index, 'isItADailyDouble', value)
+                                        (index, isDD) =>
+                                            updateQuestionAttribute(categoryObj.category, index, 'isItADailyDouble', isDD)
                                     }
                                     setQuestionType={
-                                        (index, value) =>
-                                            updateQuestionAttribute(categoryObj.category, index, 'questionType', value)
+                                        (index, qType) =>
+                                            updateQuestionAttribute(categoryObj.category, index, 'questionType', qType)
                                     }
                                 />
                             ))}
