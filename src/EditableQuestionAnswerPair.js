@@ -1,7 +1,24 @@
-import React from 'react';
-import { Button, ButtonGroup, TextField } from '@mui/material';
+import React, { useState } from 'react';
+import {
+    Button,
+    ButtonGroup,
+    Checkbox,
+    FormControl,
+    FormControlLabel,
+    Radio,
+    RadioGroup,
+    TextField,
+    Typography,
+} from '@mui/material';
+
+const DIFFICULTY_LEVELS = [
+    { value: 0, label: "Easy" },
+    { value: 1, label: "Medium" },
+    { value: 2, label: "Difficult" },
+];
 
 const EditableQuestionAnswerPair = ({
+    categoryType,
     question,
     answer,
     difficulty,
@@ -9,12 +26,15 @@ const EditableQuestionAnswerPair = ({
     onQuestionChange,
     onAnswerChange,
     setDifficulty,
+    setDailyDouble,
+    setQuestionType,
 }) => {
-    const difficultyLevels = [
-        { value: 0, label: "Easy" },
-        { value: 1, label: "Medium" },
-        { value: 2, label: "Difficult" },
-    ];
+    const [isChecked, setIsChecked] = useState(false);
+
+    const handleCheckboxChange = () => {
+        setIsChecked(!isChecked);
+        setDailyDouble(index, !isChecked);
+    }
 
     return (
         <div className="question-answer-pair">
@@ -22,7 +42,7 @@ const EditableQuestionAnswerPair = ({
                 id={`question-${index}`}
                 value={question}
                 onChange={(event) => onQuestionChange(index, event.target.value)}
-                label={`# ${index}`}
+                label="Question"
                 className="question-textarea"
                 variant="outlined"
                 multiline
@@ -36,9 +56,22 @@ const EditableQuestionAnswerPair = ({
                 variant="outlined"
                 multiline
             />
-            <span className="question-index">Q {index}</span>
+            <Typography variant="body1">Q {index + 1}</Typography>
+            <FormControl component="fieldset">
+                <RadioGroup
+                    row
+                    aria-label="position"
+                    name="position"
+                    value={categoryType}
+                    onChange={(event) => setQuestionType(index, event.target.value)}
+                >
+                    <FormControlLabel value="T" control={<Radio color="primary" />} label="Text" />
+                    <FormControlLabel value="P" control={<Radio color="primary" />} label="Image" />
+                    <FormControlLabel value="S" control={<Radio color="primary" />} label="Audio" />
+                </RadioGroup>
+            </FormControl>
             <ButtonGroup variant="contained" aria-label="outlined primary button group">
-                {difficultyLevels.map(({ value, label }) => (
+                {DIFFICULTY_LEVELS.map(({ value, label }) => (
                     <Button
                         sx={{
                             backgroundColor: difficulty === value ? '#3f51b5' : '#fff',
@@ -55,6 +88,15 @@ const EditableQuestionAnswerPair = ({
                     </Button>
                 ))}
             </ButtonGroup>
+            <FormControlLabel
+                control={
+                    <Checkbox
+                        checked={isChecked}
+                        onChange={handleCheckboxChange}
+                    />
+                }
+                label="Daily Double?"
+            />
         </div>
     );
 };

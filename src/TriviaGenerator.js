@@ -10,6 +10,7 @@ const DEFAULT_NUM_QUESTIONS = 7;
 
 const TriviaGenerator = () => {
     const [error, setError] = useState('');
+    const [categoryType, setCategoryType] = useState('T');
     const [categoryInput, setCategoryInput] = useState('');
     const [questionsByCategory, setQuestionsByCategory] = useState([]);
     const [dataLoaded, setDataLoaded] = useState(false);
@@ -17,13 +18,12 @@ const TriviaGenerator = () => {
     const [collapsed, setCollapsed] = useState({});
 
     const handleSubmit = async (e) => {
+        console.log("Submit button w/ category type:", categoryType);
         setDataLoaded(false);
         e.preventDefault();
         setError('');
 
-        try {
-            const response = await axios.post('/generate', { categoryInput, numQuestions: numQuestions });
-
+        if (categoryType !== 'T') {
             setQuestionsByCategory((prevState) => {
                 [...prevState].map((categoryObj) => {
                     categoryObj.questions = categoryObj.questions.filter(
@@ -36,14 +36,49 @@ const TriviaGenerator = () => {
                     ...prevState,
                     {
                         category: categoryInput,
-                        questions: response.data,
+                        questions: [
+                            { question: '', answer: '', questionType: categoryType },
+                            { question: '', answer: '', questionType: categoryType },
+                            { question: '', answer: '', questionType: categoryType },
+                            { question: '', answer: '', questionType: categoryType },
+                            { question: '', answer: '', questionType: categoryType },
+                        ],
                     },
                 ];
             });
 
             setDataLoaded(true);
-        } catch (err) {
-            setError('Error generating trivia questions');
+        } else {
+            try {
+                const response = await axios.post('/generate', { categoryInput, numQuestions: numQuestions });
+                console.log(response.data);
+
+                setQuestionsByCategory((prevState) => {
+                    [...prevState].map((categoryObj) => {
+                        categoryObj.questions = categoryObj.questions.filter(
+                            (question) => typeof question.difficulty !== "undefined"
+                        );
+                        return categoryObj;
+                    });
+
+                    return [
+                        ...prevState,
+                        {
+                            category: categoryInput,
+                            questions: response.data.map((qaPair) => {
+                                return {
+                                    ...qaPair,
+                                    questionType: categoryType,
+                                };
+                            }),
+                        },
+                    ];
+                });
+
+                setDataLoaded(true);
+            } catch (err) {
+                setError('Error generating trivia questions');
+            }
         }
     };
 
@@ -114,7 +149,6 @@ const TriviaGenerator = () => {
             (prevState) => {
                 return prevState.map((categoryObj) => {
                     if (categoryObj.category === category) {
-                        console.log(categoryObj);
                         const numEasy = categoryObj.questions.filter(
                             (question) => question.difficulty === 0
                         ).length;
@@ -150,7 +184,6 @@ const TriviaGenerator = () => {
                                 return question;
                             }),
                         };
-
                     }
                     return categoryObj;
                 });
@@ -158,6 +191,31 @@ const TriviaGenerator = () => {
         );
     };
 
+    const updateIsDailyDouble = (category, questionIndex, newDDStatus) => {
+        setQuestionsByCategory((prevState) => {
+            const updatedQuestionsByCategory = [...prevState];
+            const categoryIndex = updatedQuestionsByCategory.findIndex(
+                (item) => item.category === category
+            );
+            updatedQuestionsByCategory[categoryIndex].questions[
+                questionIndex
+            ].isItADailyDouble = newDDStatus;
+            return updatedQuestionsByCategory;
+        });
+    };
+
+    const updateQuestionType = (category, questionIndex, newQuestionTypeStatus) => {
+        setQuestionsByCategory((prevState) => {
+            const updatedQuestionsByCategory = [...prevState];
+            const categoryIndex = updatedQuestionsByCategory.findIndex(
+                (item) => item.category === category
+            );
+            updatedQuestionsByCategory[categoryIndex].questions[
+                questionIndex
+            ].questionType = newQuestionTypeStatus;
+            return updatedQuestionsByCategory;
+        });
+    };
 
     return (
         <Container
@@ -173,6 +231,8 @@ const TriviaGenerator = () => {
             <h1 className="main-title">Trivia Generator</h1>
             <TriviaInputForm
                 className="input-form"
+                categoryType={categoryType}
+                setCategoryType={setCategoryType}
                 categoryInput={categoryInput}
                 setCategoryInput={setCategoryInput}
                 numQuestions={numQuestions}
@@ -181,28 +241,50 @@ const TriviaGenerator = () => {
                 dataLoaded={dataLoaded}
             />
             {error && <p className="error-message">{error}</p>}
-            {questionsByCategory.map((categoryObj, i) => (
-                <div className="categoryTitle" key={i}>
-                    <h3 onClick={() => setCollapsed({ ...collapsed, [categoryObj.category]: !collapsed[categoryObj.category] })}>
-                        {categoryObj.category} {collapsed[categoryObj.category] ? "+" : "-"}
-                    </h3>
-                    <div className="finishedCat">
-                    {!collapsed[categoryObj.category] && categoryObj.questions.map((qaPair, j) => (
-                        <EditableQuestionAnswerPair
-                            key={j}
-                            category={categoryObj.category}
-                            index={j}
-                            question={qaPair.question}
-                            answer={qaPair.answer}
-                            difficulty={qaPair.difficulty}
-                            onQuestionChange={(index, value) => updateQuestion(categoryObj.category, index, value)}
-                            onAnswerChange={(index, value) => updateAnswer(categoryObj.category, index, value)}
-                            setDifficulty={(index, diffiRank) => updateDifficulty(categoryObj.category, index, diffiRank)}
-                        />
-                    ))}
-                    </div>
-                </div>
-            ))}
+            <div className="questions-container">
+                {
+                    questionsByCategory.map((categoryObj) => (
+                        <div key={categoryObj.category} className="category">
+                            <h3 onClick={() => setCollapsed({ ...collapsed, [categoryObj.category]: !collapsed[categoryObj.category] })}>
+                                {categoryObj.category} {collapsed[categoryObj.category] ? "+" : "-"}
+                            </h3>
+                            <div className="finishedCat">
+                                {!collapsed[categoryObj.category] && categoryObj.questions.map((questionObj, index) => (
+                                    <EditableQuestionAnswerPair
+                                        key={index}
+                                        index={index}
+                                        className="editable-pair"
+                                        categoryType={questionObj.questionType}
+                                        question={questionObj.question}
+                                        answer={questionObj.answer}
+                                        difficulty={questionObj.difficulty}
+                                        onQuestionChange={
+                                            (index, value) =>
+                                                updateQuestion(categoryObj.category, index, value)
+                                        }
+                                        onAnswerChange={
+                                            (index, value) =>
+                                                updateAnswer(categoryObj.category, index, value)
+                                        }
+                                        setDifficulty={
+                                            (index, diffiRank) =>
+                                                updateDifficulty(categoryObj.category, index, diffiRank)
+                                        }
+                                        setDailyDouble={
+                                            (index, isDD) =>
+                                                updateIsDailyDouble(categoryObj.category, index, isDD)
+                                        }
+                                        setQuestionType={
+                                            (index, qType) =>
+                                                updateQuestionType(categoryObj.category, index, qType)
+                                        }
+                                    />
+                                ))}
+                            </div>
+                        </div>
+                    ))
+                }
+            </div>
             <Button
                 onClick={handleSave}
                 sx={{
@@ -220,7 +302,7 @@ const TriviaGenerator = () => {
             >
                 Save TXT
             </Button>
-        </Container>
+        </Container >
     );
 };
 
