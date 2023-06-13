@@ -22,40 +22,63 @@ const TriviaGenerator = () => {
         e.preventDefault();
         setError('');
 
-        const addQuestionType = (data, type) => data.map(item => ({ ...item, questionType: type }));
+        if (categoryType !== 'T') {
+            setQuestionsByCategory((prevState) => {
+                [...prevState].map((categoryObj) => {
+                    categoryObj.questions = categoryObj.questions.filter(
+                        (question) => typeof question.difficulty !== "undefined"
+                    );
+                    return categoryObj;
+                });
 
-        const removeQuestionsWithoutDifficultyRating = (categories) =>
-            categories.map(categoryObj => {
-                categoryObj.questions = categoryObj.questions.filter(
-                    question => typeof question.difficulty !== "undefined"
-                );
-                return categoryObj;
+                return [
+                    ...prevState,
+                    {
+                        category: categoryInput,
+                        questions: [
+                            { question: '', answer: '', questionType: categoryType },
+                            { question: '', answer: '', questionType: categoryType },
+                            { question: '', answer: '', questionType: categoryType },
+                            { question: '', answer: '', questionType: categoryType },
+                            { question: '', answer: '', questionType: categoryType },
+                        ],
+                    },
+                ];
             });
 
-        const addCategoryToState = async (type) => {
-            let questions;
-            if (type === 'T') {
-                try {
-                    const response = await axios.post('/generate', { categoryInput, numQuestions: numQuestions });
-                    console.log(response.data);
-                    questions = addQuestionType(response.data, type);
-                } catch (err) {
-                    setError('Error generating trivia questions');
-                    return;
-                }
-            } else {
-                questions = Array(5).fill({ question: '', answer: '', questionType: type });
-            }
-
-            setQuestionsByCategory(prevState => [
-                ...removeQuestionsWithoutDifficultyRating(prevState),
-                { category: categoryInput, questions }
-            ]);
-
             setDataLoaded(true);
-        };
+        } else {
+            try {
+                const response = await axios.post('/generate', { categoryInput, numQuestions: numQuestions });
+                console.log(response.data);
 
-        addCategoryToState(categoryType);
+                setQuestionsByCategory((prevState) => {
+                    [...prevState].map((categoryObj) => {
+                        categoryObj.questions = categoryObj.questions.filter(
+                            (question) => typeof question.difficulty !== "undefined"
+                        );
+                        return categoryObj;
+                    });
+
+                    return [
+                        ...prevState,
+                        {
+                            category: categoryInput,
+                            questions: response.data.map((qaPair) => {
+                                return {
+                                    ...qaPair,
+                                    questionType: categoryType,
+                                };
+                            }),
+                        },
+                    ];
+                });
+
+                setDataLoaded(true);
+            } catch (err) {
+                setError('Error generating trivia questions');
+            }
+        }
     };
 
     const handleSave = async () => {
