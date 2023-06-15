@@ -19,10 +19,8 @@ const handleGenerate = async (req, res) => {
 }
 
 const handleSave = async (req, res) => {
-    const { categoryNames, questionsByCategory } = req.body;
+    const { categoryNames, questionsByCategory, folderName } = req.body;
     const fileName = categoryNames.join('_') + '.txt';
-
-    const folderName = "myCustomFolder";
 
     try {
         await convertAndSave(questionsByCategory, fileName, folderName);

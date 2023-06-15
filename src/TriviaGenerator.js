@@ -10,6 +10,7 @@ const DEFAULT_NUM_QUESTIONS = 7;
 
 const TriviaGenerator = () => {
     const [error, setError] = useState('');
+    const [folderNameInput, setFolderNameInput] = useState('');
     const [categoryType, setCategoryType] = useState('T');
     const [categoryInput, setCategoryInput] = useState('');
     const [questionsByCategory, setQuestionsByCategory] = useState([]);
@@ -113,7 +114,8 @@ const TriviaGenerator = () => {
             console.log(filteredQuestionsByCategory);
             await axios.post('/save', {
                 categoryNames,
-                questionsByCategory: filteredQuestionsByCategory
+                questionsByCategory: filteredQuestionsByCategory,
+                folderName: folderNameInput,
             });
             alert('Trivia questions saved successfully on the server.');
         } catch (err) {
@@ -234,6 +236,8 @@ const TriviaGenerator = () => {
             <h1 className="main-title">Trivia Generator</h1>
             <TriviaInputForm
                 className="input-form"
+                folderNameInput={folderNameInput}
+                setFolderNameInput={setFolderNameInput}
                 categoryType={categoryType}
                 setCategoryType={setCategoryType}
                 categoryInput={categoryInput}
