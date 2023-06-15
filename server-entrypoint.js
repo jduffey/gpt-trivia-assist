@@ -1,6 +1,4 @@
 const express = require('express');
-const fs = require('fs');
-const path = require('path');
 const { generateTriviaQuestions } = require('./server-utils/generateTriviaQuestions');
 const { convertAndSave } = require('./server-utils/convertAndSave');
 const app = express();
@@ -21,11 +19,11 @@ const handleGenerate = async (req, res) => {
 }
 
 const handleSave = async (req, res) => {
-    const { categoryNames, questionsByCategory } = req.body;
+    const { categoryNames, questionsByCategory, folderName } = req.body;
     const fileName = categoryNames.join('_') + '.txt';
 
     try {
-        await convertAndSave(questionsByCategory, fileName);
+        await convertAndSave(questionsByCategory, fileName, folderName);
         res.status(200).json({ message: 'Trivia questions saved successfully' });
     } catch (error) {
         res.status(500).json({ message: 'Server error' });

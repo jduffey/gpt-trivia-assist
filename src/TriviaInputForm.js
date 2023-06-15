@@ -39,6 +39,10 @@ const TriviaInputForm = ({
     }, [dataLoaded]);
 
     const handleSubmit = (e) => {
+        if (categoryInput === '') {
+            alert('Please enter a category');
+            return;
+        };
         e.preventDefault();
         setElapsedSeconds(0);
         if (categoryType === 'T') {
@@ -67,7 +71,6 @@ const TriviaInputForm = ({
                 label="Category"
                 value={categoryInput}
                 onChange={(e) => setCategoryInput(e.target.value)}
-                className="category-input"
             />
             <TextField
                 id="numQuestions-input"

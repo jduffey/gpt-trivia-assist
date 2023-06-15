@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
-import { Button, Container } from '@mui/material';
+import { Button, Container, TextField } from '@mui/material';
 
 import EditableQuestionAnswerPair from './EditableQuestionAnswerPair';
 import TriviaInputForm from './TriviaInputForm';
@@ -10,6 +10,7 @@ const DEFAULT_NUM_QUESTIONS = 7;
 
 const TriviaGenerator = () => {
     const [error, setError] = useState('');
+    const [folderNameInput, setFolderNameInput] = useState('');
     const [categoryType, setCategoryType] = useState('T');
     const [categoryInput, setCategoryInput] = useState('');
     const [questionsByCategory, setQuestionsByCategory] = useState([]);
@@ -81,6 +82,8 @@ const TriviaGenerator = () => {
                 setError('Error generating trivia questions');
             }
         }
+
+        setCategoryInput('');
     };
 
     const handleSave = async () => {
@@ -111,7 +114,8 @@ const TriviaGenerator = () => {
             console.log(filteredQuestionsByCategory);
             await axios.post('/save', {
                 categoryNames,
-                questionsByCategory: filteredQuestionsByCategory
+                questionsByCategory: filteredQuestionsByCategory,
+                folderName: folderNameInput,
             });
             alert('Trivia questions saved successfully on the server.');
         } catch (err) {
@@ -247,7 +251,7 @@ const TriviaGenerator = () => {
                     questionsByCategory.map((categoryObj) => (
                         <div key={categoryObj.category} className="category">
                             <h3 onClick={() => setCollapsed({ ...collapsed, [categoryObj.category]: !collapsed[categoryObj.category] })}>
-                                {categoryObj.category} {collapsed[categoryObj.category] ? "+" : "-"}
+                                {categoryObj.category} {collapsed[categoryObj.category] ? String.fromCharCode(0x02192) : String.fromCharCode(0x02193)}
                             </h3>
                             {!collapsed[categoryObj.category] && categoryObj.questions.map((questionObj, index) => (
                                 <EditableQuestionAnswerPair
@@ -285,14 +289,19 @@ const TriviaGenerator = () => {
                     ))
                 }
             </div>
+            <TextField
+                id="folderNameInput"
+                label="Output Folder"
+                value={folderNameInput}
+                onChange={(e) => setFolderNameInput(e.target.value)}
+            />
             <Button
                 onClick={handleSave}
                 sx={{
                     backgroundColor: '#27ae60',
                     color: '#ffffff',
+                    marginLeft: '10px',
                     padding: '10px 40px',
-                    border: 'solid 8px #179e50',
-                    borderRadius: '16px',
                     fontSize: '20px',
                     transition: 'background-color 0.1s',
                     '&:hover': {
