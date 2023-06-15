@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import {
+    Avatar,
     Button,
     ButtonGroup,
     Checkbox,
     FormControl,
     FormControlLabel,
+    Grid,
     Radio,
     RadioGroup,
     TextField,
@@ -33,6 +35,7 @@ const EditableQuestionAnswerPair = ({
     setQuestionType,
 }) => {
     const [isChecked, setIsChecked] = useState(false);
+    const [image, setImage] = useState(null);
 
     const handleCheckboxChange = () => {
         setIsChecked(!isChecked);
@@ -52,6 +55,9 @@ const EditableQuestionAnswerPair = ({
 
             const fileNameWithoutExtension = fileName.split('.')[0];
             onAnswerChange(index, fileNameWithoutExtension);
+
+            const fileURL = URL.createObjectURL(file);
+            setImage(fileURL);
         };
 
         input.click();
@@ -59,15 +65,30 @@ const EditableQuestionAnswerPair = ({
 
     return (
         <div className="question-answer-pair">
-            <TextField
-                id={`question-${index}`}
-                value={question}
-                onChange={(event) => onQuestionChange(index, event.target.value)}
-                label="Question"
-                className="question-textarea"
-                variant="outlined"
-                multiline
-            />
+            <Grid
+                container
+                direction="row"
+                justifyContent="space-between"
+                alignItems="center"
+            >
+                <Grid item xs={image ? 10 : 12} pr={2}>
+                    <TextField
+                        id={`question-${index}`}
+                        value={question}
+                        onChange={(event) => onQuestionChange(index, event.target.value)}
+                        label="Question"
+                        className="question-textarea"
+                        variant="outlined"
+                        multiline
+                        fullWidth
+                    />
+                </Grid>
+                {image && (
+                    <Grid item xs={2}>
+                        <Avatar src={image} sx={{ width: 56, height: 56, borderRadius: '0%' }} />
+                    </Grid>
+                )}
+            </Grid>
             <TextField
                 id={`answer-${index}`}
                 value={answer}
