@@ -249,7 +249,7 @@ const TriviaGenerator = () => {
                     questionsByCategory.map((categoryObj) => (
                         <div key={categoryObj.category} className="category">
                             <h3 onClick={() => setCollapsed({ ...collapsed, [categoryObj.category]: !collapsed[categoryObj.category] })}>
-                                {categoryObj.category} {collapsed[categoryObj.category] ? "+" : "-"}
+                                {categoryObj.category} {collapsed[categoryObj.category] ? String.fromCharCode(0x02192) : String.fromCharCode(0x02193)}
                             </h3>
                             {!collapsed[categoryObj.category] && categoryObj.questions.map((questionObj, index) => (
                                 <EditableQuestionAnswerPair
