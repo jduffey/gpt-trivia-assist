@@ -1,4 +1,5 @@
 const express = require('express');
+const multer = require('multer');
 const { generateTriviaQuestions } = require('./server-utils/generateTriviaQuestions');
 const { convertAndSave } = require('./server-utils/convertAndSave');
 const app = express();
@@ -30,9 +31,23 @@ const handleSave = async (req, res) => {
     }
 }
 
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, 'FOO')
+    },
+    filename: function (req, file, cb) {
+        cb(null, file.fieldname + '-' + Date.now())
+    }
+})
+
+const upload = multer({ storage: storage })
+
 app.use(express.json());
 app.post('/generate', handleGenerate);
 app.post('/save', handleSave);
+app.post('/copy-image', upload.single('image'), (req, res) => {
+    res.send('Image received and stored');
+});
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
 });
