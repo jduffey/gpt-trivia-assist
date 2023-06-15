@@ -81,6 +81,8 @@ const TriviaGenerator = () => {
                 setError('Error generating trivia questions');
             }
         }
+
+        setCategoryInput('');
     };
 
     const handleSave = async () => {
