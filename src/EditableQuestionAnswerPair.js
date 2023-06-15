@@ -18,6 +18,8 @@ const DIFFICULTY_LEVELS = [
 ];
 
 const EditableQuestionAnswerPair = ({
+    folderNameInput,
+    categoryName,
     categoryType,
     question,
     answer,
@@ -43,8 +45,9 @@ const EditableQuestionAnswerPair = ({
         input.accept = "image/*";
 
         input.onchange = (event) => {
-            const filePath = event.target.value;
-            onQuestionChange(index, filePath);
+            const file = event.target.files[0];
+            const questionFieldText = `J:\\${folderNameInput}\\${categoryName}\\${file.name}`;
+            onQuestionChange(index, questionFieldText);
         };
 
         input.click();
