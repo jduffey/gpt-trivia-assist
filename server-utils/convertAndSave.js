@@ -37,13 +37,18 @@ function convertToCustomFormat(questionsByCategory) {
     return output;
 }
 
-function saveCustomFormatFile(data, fileName) {
+function saveCustomFormatFile(data, fileName, folderName) {
     const outputDir = path.resolve(__dirname, '..', 'output');
     if (!fs.existsSync(outputDir)) {
         fs.mkdirSync(outputDir);
     }
 
-    const filePath = path.join(outputDir, fileName);
+    const customFolder = path.resolve(__dirname, '../output', folderName);
+    if (!fs.existsSync(customFolder)) {
+        fs.mkdirSync(customFolder);
+    }
+
+    const filePath = path.join(customFolder, fileName);
 
     return new Promise((resolve, reject) => {
         fs.writeFile(filePath, data, (err) => {
@@ -67,8 +72,8 @@ function saveCustomFormatFile(data, fileName) {
 }
 
 module.exports = {
-    convertAndSave: (questionsByCategory, fileName) => {
+    convertAndSave: (questionsByCategory, fileName, folderName) => {
         const customFormatData = convertToCustomFormat(questionsByCategory);
-        return saveCustomFormatFile(customFormatData, fileName);
+        return saveCustomFormatFile(customFormatData, fileName, folderName);
     }
 };
