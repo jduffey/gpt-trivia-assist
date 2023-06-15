@@ -18,6 +18,8 @@ const DIFFICULTY_LEVELS = [
 ];
 
 const EditableQuestionAnswerPair = ({
+    folderNameInput,
+    categoryName,
     categoryType,
     question,
     answer,
@@ -36,6 +38,24 @@ const EditableQuestionAnswerPair = ({
         setIsChecked(!isChecked);
         setDailyDouble(index, !isChecked);
     }
+
+    const handleImageUploadClick = () => {
+        const input = document.createElement("input");
+        input.type = "file";
+        input.accept = "image/*";
+
+        input.onchange = (event) => {
+            const file = event.target.files[0];
+            const fileName = file.name;
+            const questionFieldText = `J:\\${folderNameInput}\\${categoryName}\\${fileName}`;
+            onQuestionChange(index, questionFieldText);
+
+            const fileNameWithoutExtension = fileName.split('.')[0];
+            onAnswerChange(index, fileNameWithoutExtension);
+        };
+
+        input.click();
+    };
 
     return (
         <div className="question-answer-pair">
@@ -58,6 +78,18 @@ const EditableQuestionAnswerPair = ({
                 multiline
             />
             <Typography variant="body1">Q {index + 1}</Typography>
+            <Button
+                sx={{
+                    backgroundColor: '#3f51b5',
+                    color: '#fff',
+                    '&:hover': {
+                        backgroundColor: 'pink',
+                        transition: '0s',
+                    },
+                }}
+                onClick={handleImageUploadClick}>
+                Upload
+            </Button>
             <FormControl component="fieldset">
                 <RadioGroup
                     row

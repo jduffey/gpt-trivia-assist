@@ -258,6 +258,8 @@ const TriviaGenerator = () => {
                                     key={index}
                                     index={index}
                                     className="editable-pair"
+                                    folderNameInput={folderNameInput}
+                                    categoryName={categoryObj.category}
                                     categoryType={questionObj.questionType}
                                     question={questionObj.question}
                                     answer={questionObj.answer}
