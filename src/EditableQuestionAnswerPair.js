@@ -46,8 +46,12 @@ const EditableQuestionAnswerPair = ({
 
         input.onchange = (event) => {
             const file = event.target.files[0];
-            const questionFieldText = `J:\\${folderNameInput}\\${categoryName}\\${file.name}`;
+            const fileName = file.name;
+            const questionFieldText = `J:\\${folderNameInput}\\${categoryName}\\${fileName}`;
             onQuestionChange(index, questionFieldText);
+
+            const fileNameWithoutExtension = fileName.split('.')[0];
+            onAnswerChange(index, fileNameWithoutExtension);
         };
 
         input.click();
