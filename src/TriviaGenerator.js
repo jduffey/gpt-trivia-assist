@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
-import { Button, Container } from '@mui/material';
+import { Button, Container, TextField } from '@mui/material';
 
 import EditableQuestionAnswerPair from './EditableQuestionAnswerPair';
 import TriviaInputForm from './TriviaInputForm';
@@ -236,8 +236,6 @@ const TriviaGenerator = () => {
             <h1 className="main-title">Trivia Generator</h1>
             <TriviaInputForm
                 className="input-form"
-                folderNameInput={folderNameInput}
-                setFolderNameInput={setFolderNameInput}
                 categoryType={categoryType}
                 setCategoryType={setCategoryType}
                 categoryInput={categoryInput}
@@ -291,14 +289,19 @@ const TriviaGenerator = () => {
                     ))
                 }
             </div>
+            <TextField
+                id="folderNameInput"
+                label="Output Folder"
+                value={folderNameInput}
+                onChange={(e) => setFolderNameInput(e.target.value)}
+            />
             <Button
                 onClick={handleSave}
                 sx={{
                     backgroundColor: '#27ae60',
                     color: '#ffffff',
+                    marginLeft: '10px',
                     padding: '10px 40px',
-                    border: 'solid 8px #179e50',
-                    borderRadius: '16px',
                     fontSize: '20px',
                     transition: 'background-color 0.1s',
                     '&:hover': {

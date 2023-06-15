@@ -10,8 +10,6 @@ import {
 } from '@mui/material';
 
 const TriviaInputForm = ({
-    folderNameInput,
-    setFolderNameInput,
     categoryType,
     setCategoryType,
     categoryInput,
@@ -55,12 +53,6 @@ const TriviaInputForm = ({
 
     return (
         <form onSubmit={handleSubmit} className="trivia-form">
-            <TextField
-                id="folderNameInput"
-                label="Output Folder"
-                value={folderNameInput}
-                onChange={(e) => setFolderNameInput(e.target.value)}
-            />
             <FormControl component="fieldset">
                 <RadioGroup
                     row
