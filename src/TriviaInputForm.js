@@ -60,7 +60,6 @@ const TriviaInputForm = ({
                 label="Output Folder"
                 value={folderNameInput}
                 onChange={(e) => setFolderNameInput(e.target.value)}
-                className="folder-name-input"
             />
             <FormControl component="fieldset">
                 <RadioGroup
@@ -80,7 +79,6 @@ const TriviaInputForm = ({
                 label="Category"
                 value={categoryInput}
                 onChange={(e) => setCategoryInput(e.target.value)}
-                className="category-input"
             />
             <TextField
                 id="numQuestions-input"
