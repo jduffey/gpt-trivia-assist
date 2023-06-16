@@ -4,6 +4,8 @@ import {
     Button,
     ButtonGroup,
     Checkbox,
+    Dialog,
+    DialogContent,
     FormControl,
     FormControlLabel,
     Grid,
@@ -36,6 +38,15 @@ const EditableQuestionAnswerPair = ({
 }) => {
     const [isChecked, setIsChecked] = useState(false);
     const [image, setImage] = useState(null);
+    const [isImagePreviewOpen, setIsImagePreviewOpen] = useState(false);
+
+    const handleClickImageAvatar = () => {
+        setIsImagePreviewOpen(true);
+    };
+
+    const handleClickImagePreview = () => {
+        setIsImagePreviewOpen(false);
+    };
 
     const handleCheckboxChange = () => {
         setIsChecked(!isChecked);
@@ -43,18 +54,20 @@ const EditableQuestionAnswerPair = ({
     }
 
     const sendImageToServer = (file) => {
-        let formData = new FormData();
+        const formData = new FormData();
         formData.append('image', file);
         fetch('/copy-image', {
             method: 'POST',
-            body: formData
+            body: formData,
         }).then(response => {
             if (!response.ok) {
+                // TODO: improve this error message?
                 throw new Error('Network response was not ok');
             }
             return response.blob();
         }).then(imageBlob => {
-            // If you need to do anything with the response, you can do it here
+            // TODO: review this code block; is there anything to do here?
+            // (From ChatGPT): If you need to do anything with the response, you can do it here
         }).catch(error => {
             console.error('There has been a problem with your fetch operation:', error);
         });
@@ -104,10 +117,15 @@ const EditableQuestionAnswerPair = ({
                     />
                 </Grid>
                 {image && (
-                    <Grid item xs={2}>
+                    <Button onClick={handleClickImageAvatar}>
                         <Avatar src={image} sx={{ width: 56, height: 56, borderRadius: '0%' }} />
-                    </Grid>
+                    </Button>
                 )}
+                <Dialog open={isImagePreviewOpen} onClose={handleClickImagePreview}>
+                    <DialogContent>
+                        <img src={image} alt="" style={{ width: '100%', height: '100%' }} />
+                    </DialogContent>
+                </Dialog>
             </Grid>
             <TextField
                 id={`answer-${index}`}
