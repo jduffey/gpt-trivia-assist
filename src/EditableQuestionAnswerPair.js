@@ -40,14 +40,6 @@ const EditableQuestionAnswerPair = ({
     const [image, setImage] = useState(null);
     const [isImagePreviewOpen, setIsImagePreviewOpen] = useState(false);
 
-    const handleClickImageAvatar = () => {
-        setIsImagePreviewOpen(true);
-    };
-
-    const handleClickImagePreview = () => {
-        setIsImagePreviewOpen(false);
-    };
-
     const handleCheckboxChange = () => {
         setIsChecked(!isChecked);
         setDailyDouble(index, !isChecked);
@@ -117,11 +109,11 @@ const EditableQuestionAnswerPair = ({
                     />
                 </Grid>
                 {image && (
-                    <Button onClick={handleClickImageAvatar}>
+                    <Button onClick={() => setIsImagePreviewOpen(true)}>
                         <Avatar src={image} sx={{ width: 56, height: 56, borderRadius: '0%' }} />
                     </Button>
                 )}
-                <Dialog open={isImagePreviewOpen} onClose={handleClickImagePreview}>
+                <Dialog open={isImagePreviewOpen} onClose={() => setIsImagePreviewOpen(false)}>
                     <DialogContent>
                         <img src={image} alt="" style={{ width: '100%', height: '100%' }} />
                     </DialogContent>
