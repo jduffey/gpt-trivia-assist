@@ -177,7 +177,10 @@ const EditableQuestionAnswerPair = ({
                             transition: '0s',
                         }
                     }}
-                onClick={categoryType === 'P' ? handleImageUploadClick : handleAudioUploadClick}
+                onClick={{
+                    'P': handleImageUploadClick,
+                    'S': handleAudioUploadClick,
+                }[categoryType]}
             >
                 {uploadButtonDisabled
                     ? <s>Upload</s>
