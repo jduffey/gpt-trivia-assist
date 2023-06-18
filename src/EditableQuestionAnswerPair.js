@@ -37,7 +37,7 @@ const EditableQuestionAnswerPair = ({
     setQuestionType,
 }) => {
     const [isChecked, setIsChecked] = useState(false);
-    const [image, setImage] = useState(null);
+    const [imageAvatar, setImageAvatar] = useState(null);
     const [isImagePreviewOpen, setIsImagePreviewOpen] = useState(false);
 
     const handleCheckboxChange = () => {
@@ -92,7 +92,7 @@ const EditableQuestionAnswerPair = ({
             onAnswerChange(index, fileNameWithoutExtension);
 
             const fileURL = URL.createObjectURL(file);
-            setImage(fileURL);
+            setImageAvatar(fileURL);
 
             sendImageToServer(file);
         };
@@ -130,7 +130,7 @@ const EditableQuestionAnswerPair = ({
                 justifyContent="space-between"
                 alignItems="center"
             >
-                <Grid item xs={image ? 10 : 12} pr={2}>
+                <Grid item xs={imageAvatar ? 10 : 12} pr={2}>
                     <TextField
                         id={`question-${index}`}
                         value={question}
@@ -142,14 +142,14 @@ const EditableQuestionAnswerPair = ({
                         fullWidth
                     />
                 </Grid>
-                {image && (
+                {imageAvatar && (
                     <Button onClick={() => setIsImagePreviewOpen(true)}>
-                        <Avatar src={image} sx={{ width: 56, height: 56, borderRadius: '0%' }} />
+                        <Avatar src={imageAvatar} sx={{ width: 56, height: 56, borderRadius: '0%' }} />
                     </Button>
                 )}
                 <Dialog open={isImagePreviewOpen} onClose={() => setIsImagePreviewOpen(false)}>
                     <DialogContent>
-                        <img src={image} alt="" style={{ width: '100%', height: '100%' }} />
+                        <img src={imageAvatar} alt="" style={{ width: '100%', height: '100%' }} />
                     </DialogContent>
                 </Dialog>
             </Grid>
