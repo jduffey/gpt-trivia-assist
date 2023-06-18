@@ -1,10 +1,14 @@
 import React, { useState } from 'react';
 import {
+    Avatar,
     Button,
     ButtonGroup,
     Checkbox,
+    Dialog,
+    DialogContent,
     FormControl,
     FormControlLabel,
+    Grid,
     Radio,
     RadioGroup,
     TextField,
@@ -33,11 +37,45 @@ const EditableQuestionAnswerPair = ({
     setQuestionType,
 }) => {
     const [isChecked, setIsChecked] = useState(false);
+    const [imageAvatar, setImageAvatar] = useState(null);
+    const [isImagePreviewOpen, setIsImagePreviewOpen] = useState(false);
 
     const handleCheckboxChange = () => {
         setIsChecked(!isChecked);
         setDailyDouble(index, !isChecked);
     }
+
+    const sendImageToServer = (file) => {
+        const formData = new FormData();
+        formData.append('imageFile', file);
+        fetch('/copy-image', {
+            method: 'POST',
+            body: formData,
+        }).then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.blob();
+        }).catch(error => {
+            console.error('There has been a problem with your fetch operation:', error);
+        });
+    };
+
+    const sendAudioToServer = (file) => {
+        const formData = new FormData();
+        formData.append('audioFile', file);
+        fetch('/copy-audio', {
+            method: 'POST',
+            body: formData,
+        }).then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.blob();
+        }).catch(error => {
+            console.error('There has been a problem with your fetch operation:', error);
+        });
+    };
 
     const handleImageUploadClick = () => {
         const input = document.createElement("input");
@@ -52,22 +90,69 @@ const EditableQuestionAnswerPair = ({
 
             const fileNameWithoutExtension = fileName.split('.')[0];
             onAnswerChange(index, fileNameWithoutExtension);
+
+            const fileURL = URL.createObjectURL(file);
+            setImageAvatar(fileURL);
+
+            sendImageToServer(file);
         };
 
         input.click();
     };
 
+    const handleAudioUploadClick = () => {
+        const input = document.createElement("input");
+        input.type = "file";
+        input.accept = "audio/*";
+
+        input.onchange = (event) => {
+            const file = event.target.files[0];
+            const fileName = file.name;
+            const questionFieldText = `J:\\${folderNameInput}\\${categoryName}\\${fileName}`;
+            onQuestionChange(index, questionFieldText);
+
+            const fileNameWithoutExtension = fileName.split('.')[0];
+            onAnswerChange(index, fileNameWithoutExtension);
+
+            sendAudioToServer(file);
+        };
+
+        input.click();
+    };
+
+    const uploadButtonEnabled = ['P', 'S'].includes(categoryType);
+
     return (
         <div className="question-answer-pair">
-            <TextField
-                id={`question-${index}`}
-                value={question}
-                onChange={(event) => onQuestionChange(index, event.target.value)}
-                label="Question"
-                className="question-textarea"
-                variant="outlined"
-                multiline
-            />
+            <Grid
+                container
+                direction="row"
+                justifyContent="space-between"
+                alignItems="center"
+            >
+                <Grid item xs={imageAvatar ? 10 : 12} pr={2}>
+                    <TextField
+                        id={`question-${index}`}
+                        value={question}
+                        onChange={(event) => onQuestionChange(index, event.target.value)}
+                        label="Question"
+                        className="question-textarea"
+                        variant="outlined"
+                        multiline
+                        fullWidth
+                    />
+                </Grid>
+                {imageAvatar && (
+                    <Button onClick={() => setIsImagePreviewOpen(true)}>
+                        <Avatar src={imageAvatar} sx={{ width: 56, height: 56, borderRadius: '0%' }} />
+                    </Button>
+                )}
+                <Dialog open={isImagePreviewOpen} onClose={() => setIsImagePreviewOpen(false)}>
+                    <DialogContent>
+                        <img src={imageAvatar} alt="" style={{ width: '100%', height: '100%' }} />
+                    </DialogContent>
+                </Dialog>
+            </Grid>
             <TextField
                 id={`answer-${index}`}
                 value={answer}
@@ -79,16 +164,28 @@ const EditableQuestionAnswerPair = ({
             />
             <Typography variant="body1">Q {index + 1}</Typography>
             <Button
-                sx={{
-                    backgroundColor: '#3f51b5',
-                    color: '#fff',
-                    '&:hover': {
-                        backgroundColor: 'pink',
-                        transition: '0s',
-                    },
-                }}
-                onClick={handleImageUploadClick}>
-                Upload
+                disabled={!uploadButtonEnabled}
+                sx={uploadButtonEnabled
+                    ? {
+                        backgroundColor: '#3f51b5',
+                        color: '#ffffff',
+                        '&:hover': {
+                            backgroundColor: 'pink',
+                            transition: '0s',
+                        }
+                    }
+                    : {
+                        backgroundColor: '#eaeaea',
+                    }}
+                onClick={{
+                    'P': handleImageUploadClick,
+                    'S': handleAudioUploadClick,
+                }[categoryType]}
+            >
+                {uploadButtonEnabled
+                    ? "Upload"
+                    : <s>Upload</s>
+                }
             </Button>
             <FormControl component="fieldset">
                 <RadioGroup

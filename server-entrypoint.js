@@ -1,8 +1,18 @@
+const fs = require('fs');
+const path = require('path');
+
 const express = require('express');
+const multer = require('multer');
 const { generateTriviaQuestions } = require('./server-utils/generateTriviaQuestions');
 const { convertAndSave } = require('./server-utils/convertAndSave');
 const app = express();
 const PORT = process.env.PORT || 3000;
+
+const dirPath = path.join(__dirname, 'media-files');
+
+if (!fs.existsSync(dirPath)) {
+    fs.mkdirSync(dirPath);
+}
 
 const handleGenerate = async (req, res) => {
     console.log('Request body sent from client:');
@@ -30,9 +40,26 @@ const handleSave = async (req, res) => {
     }
 }
 
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, dirPath)
+    },
+    filename: function (req, file, cb) {
+        cb(null, file.originalname)
+    }
+});
+
+const upload = multer({ storage: storage })
+
 app.use(express.json());
 app.post('/generate', handleGenerate);
 app.post('/save', handleSave);
+app.post('/copy-image', upload.single('imageFile'), (req, res) => {
+    res.send('Image received and stored');
+});
+app.post('/copy-audio', upload.single('audioFile'), (req, res) => {
+    res.send('Audio file received and stored');
+});
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
 });
