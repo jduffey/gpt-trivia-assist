@@ -1,9 +1,18 @@
+const fs = require('fs');
+const path = require('path');
+
 const express = require('express');
 const multer = require('multer');
 const { generateTriviaQuestions } = require('./server-utils/generateTriviaQuestions');
 const { convertAndSave } = require('./server-utils/convertAndSave');
 const app = express();
 const PORT = process.env.PORT || 3000;
+
+const dirPath = path.join(__dirname, 'FOO');
+
+if (!fs.existsSync(dirPath)) {
+    fs.mkdirSync(dirPath);
+}
 
 const handleGenerate = async (req, res) => {
     console.log('Request body sent from client:');
@@ -33,12 +42,12 @@ const handleSave = async (req, res) => {
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, 'FOO')
+        cb(null, dirPath)
     },
     filename: function (req, file, cb) {
-        cb(null, file.fieldname + '-' + Date.now())
+        cb(null, file.originalname)
     }
-})
+});
 
 const upload = multer({ storage: storage })
 
