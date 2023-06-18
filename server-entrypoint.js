@@ -8,7 +8,7 @@ const { convertAndSave } = require('./server-utils/convertAndSave');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-const dirPath = path.join(__dirname, 'FOO');
+const dirPath = path.join(__dirname, 'images');
 
 if (!fs.existsSync(dirPath)) {
     fs.mkdirSync(dirPath);
