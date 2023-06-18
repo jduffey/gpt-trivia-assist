@@ -2,17 +2,12 @@ const fs = require('fs');
 const path = require('path');
 
 const express = require('express');
-const multer = require('multer');
+// const multer = require('multer');
 const { generateTriviaQuestions } = require('./server-utils/generateTriviaQuestions');
 const { convertAndSave } = require('./server-utils/convertAndSave');
+const { saveImage } = require('./server-utils/saveImage');
 const app = express();
 const PORT = process.env.PORT || 3000;
-
-const dirPath = path.join(__dirname, 'images');
-
-if (!fs.existsSync(dirPath)) {
-    fs.mkdirSync(dirPath);
-}
 
 const handleGenerate = async (req, res) => {
     console.log('Request body sent from client:');
@@ -40,23 +35,38 @@ const handleSave = async (req, res) => {
     }
 }
 
-const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        cb(null, dirPath)
-    },
-    filename: function (req, file, cb) {
-        cb(null, file.originalname)
-    }
-});
+const handleSaveImage = async (req, res) => {
+    console.log("handleSaveImage was called");
 
-const upload = multer({ storage: storage })
+    const { categoryName } = req.body;
+
+    try {
+        saveImage(categoryName);
+        res.status(200).json({ message: `Created image directory: ${categoryName}` });
+    } catch (error) {
+        console.error(`Error saving image: ${error}`);
+        res.status(500).json({ message: 'Server error - could not save image' });
+    }
+}
+
+// const storage = multer.diskStorage({
+//     destination: function (req, file, cb) {
+//         cb(null, dirPath)
+//     },
+//     filename: function (req, file, cb) {
+//         cb(null, file.originalname)
+//     }
+// });
+
+// const upload = multer({ storage: storage })
 
 app.use(express.json());
 app.post('/generate', handleGenerate);
 app.post('/save', handleSave);
-app.post('/copy-image', upload.single('image'), (req, res) => {
-    res.send('Image received and stored');
-});
+// app.post('/copy-image', upload.single('image'), (req, res) => {
+//     res.send('Image received and stored');
+// });
+app.post('/copy-image', handleSaveImage);
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
 });
