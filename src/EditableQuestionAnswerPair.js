@@ -1,6 +1,4 @@
 import React, { useState } from 'react';
-import axios from 'axios';
-
 import {
     Avatar,
     Button,
@@ -47,31 +45,24 @@ const EditableQuestionAnswerPair = ({
         setDailyDouble(index, !isChecked);
     }
 
-    const sendImageToServer = async (file) => {
+    const sendImageToServer = (file) => {
         const formData = new FormData();
         formData.append('image', file);
-        // fetch('/copy-image', {
-        //     method: 'POST',
-        //     body: formData,
-        // }).then(response => {
-        //     if (!response.ok) {
-        //         // TODO: improve this error message?
-        //         throw new Error('Network response was not ok');
-        //     }
-        //     return response.blob();
-        // }).then(imageBlob => {
-        //     // TODO: review this code block; is there anything to do here?
-        //     // (From ChatGPT): If you need to do anything with the response, you can do it here
-        // }).catch(error => {
-        //     console.error('There has been a problem with your fetch operation:', error);
-        // });
-        try {
-            await axios.post('/copy-image', {
-                categoryName,
-            });
-        } catch (err) {
-            alert("Error!", err);
-        }
+        fetch('/copy-image', {
+            method: 'POST',
+            body: formData,
+        }).then(response => {
+            if (!response.ok) {
+                // TODO: improve this error message?
+                throw new Error('Network response was not ok');
+            }
+            return response.blob();
+        }).then(imageBlob => {
+            // TODO: review this code block; is there anything to do here?
+            // (From ChatGPT): If you need to do anything with the response, you can do it here
+        }).catch(error => {
+            console.error('There has been a problem with your fetch operation:', error);
+        });
     };
 
     const handleImageUploadClick = () => {
