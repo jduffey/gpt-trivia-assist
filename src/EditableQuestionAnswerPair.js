@@ -47,19 +47,31 @@ const EditableQuestionAnswerPair = ({
 
     const sendImageToServer = (file) => {
         const formData = new FormData();
-        formData.append('image', file);
+        formData.append('imageFile', file);
         fetch('/copy-image', {
             method: 'POST',
             body: formData,
         }).then(response => {
             if (!response.ok) {
-                // TODO: improve this error message?
                 throw new Error('Network response was not ok');
             }
             return response.blob();
-        }).then(imageBlob => {
-            // TODO: review this code block; is there anything to do here?
-            // (From ChatGPT): If you need to do anything with the response, you can do it here
+        }).catch(error => {
+            console.error('There has been a problem with your fetch operation:', error);
+        });
+    };
+
+    const sendAudioToServer = (file) => {
+        const formData = new FormData();
+        formData.append('audioFile', file);
+        fetch('/copy-audio', {
+            method: 'POST',
+            body: formData,
+        }).then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.blob();
         }).catch(error => {
             console.error('There has been a problem with your fetch operation:', error);
         });
@@ -83,6 +95,26 @@ const EditableQuestionAnswerPair = ({
             setImage(fileURL);
 
             sendImageToServer(file);
+        };
+
+        input.click();
+    };
+
+    const handleAudioUploadClick = () => {
+        const input = document.createElement("input");
+        input.type = "file";
+        input.accept = "audio/*";
+
+        input.onchange = (event) => {
+            const file = event.target.files[0];
+            const fileName = file.name;
+            const questionFieldText = `J:\\${folderNameInput}\\${categoryName}\\${fileName}`;
+            onQuestionChange(index, questionFieldText);
+
+            const fileNameWithoutExtension = fileName.split('.')[0];
+            onAnswerChange(index, fileNameWithoutExtension);
+
+            sendAudioToServer(file);
         };
 
         input.click();
@@ -145,7 +177,7 @@ const EditableQuestionAnswerPair = ({
                             transition: '0s',
                         }
                     }}
-                onClick={handleImageUploadClick}
+                onClick={categoryType === 'P' ? handleImageUploadClick : handleAudioUploadClick}
             >
                 {uploadButtonDisabled
                     ? <s>Upload</s>
