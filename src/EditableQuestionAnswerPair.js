@@ -88,6 +88,8 @@ const EditableQuestionAnswerPair = ({
         input.click();
     };
 
+    const uploadButtonDisabled = categoryType === 'T';
+
     return (
         <div className="question-answer-pair">
             <Grid
@@ -130,16 +132,25 @@ const EditableQuestionAnswerPair = ({
             />
             <Typography variant="body1">Q {index + 1}</Typography>
             <Button
-                sx={{
-                    backgroundColor: '#3f51b5',
-                    color: '#fff',
-                    '&:hover': {
-                        backgroundColor: 'pink',
-                        transition: '0s',
-                    },
-                }}
-                onClick={handleImageUploadClick}>
-                Upload
+                disabled={uploadButtonDisabled}
+                sx={uploadButtonDisabled
+                    ? {
+                        backgroundColor: '#eaeaea',
+                    }
+                    : {
+                        backgroundColor: '#3f51b5',
+                        color: '#ffffff',
+                        '&:hover': {
+                            backgroundColor: 'pink',
+                            transition: '0s',
+                        }
+                    }}
+                onClick={handleImageUploadClick}
+            >
+                {uploadButtonDisabled
+                    ? <s>Upload</s>
+                    : "Upload"
+                }
             </Button>
             <FormControl component="fieldset">
                 <RadioGroup
