@@ -42,10 +42,6 @@ const EditableQuestionAnswerPair = ({
     const [isImageUploadDialogOpen, setIsImageUploadDialogOpen] = useState(false);
     const [imageUploadUrl, setImageUploadUrl] = useState('');
 
-    const handleImageUploadDialogOpen = () => {
-        setIsImageUploadDialogOpen(true);
-    };
-
     const handleImageUploadDialogClose = () => {
         setIsImageUploadDialogOpen(false);
     };
@@ -100,10 +96,6 @@ const EditableQuestionAnswerPair = ({
         }).catch(error => {
             console.error('There has been a problem with your fetch operation:', error);
         });
-    };
-
-    const handleImageUploadClick = () => {
-        handleImageUploadDialogOpen();
     };
 
     const handleAudioUploadClick = () => {
@@ -185,7 +177,7 @@ const EditableQuestionAnswerPair = ({
                         backgroundColor: '#eaeaea',
                     }}
                 onClick={{
-                    'P': handleImageUploadClick,
+                    'P': () => setIsImageUploadDialogOpen(true),
                     'S': handleAudioUploadClick,
                 }[categoryType]}
             >
