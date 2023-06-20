@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
-import { Button, Container, TextField } from '@mui/material';
+import { Button, Container } from '@mui/material';
 
 import EditableQuestionAnswerPair from './EditableQuestionAnswerPair';
 import TriviaInputForm from './TriviaInputForm';
@@ -38,11 +38,11 @@ const TriviaGenerator = () => {
                     {
                         category: categoryInput,
                         questions: [
-                            { question: '', answer: '', questionType: categoryType, isDD: false, difficulty: 0},
-                            { question: '', answer: '', questionType: categoryType, isDD: false, difficulty: 0},
-                            { question: '', answer: '', questionType: categoryType, isDD: false, difficulty: 1},
-                            { question: '', answer: '', questionType: categoryType, isDD: false, difficulty: 1},
-                            { question: '', answer: '', questionType: categoryType, isDD: false, difficulty: 2},
+                            { question: '', answer: '', questionType: categoryType, isDD: false, difficulty: 0 },
+                            { question: '', answer: '', questionType: categoryType, isDD: false, difficulty: 0 },
+                            { question: '', answer: '', questionType: categoryType, isDD: false, difficulty: 1 },
+                            { question: '', answer: '', questionType: categoryType, isDD: false, difficulty: 1 },
+                            { question: '', answer: '', questionType: categoryType, isDD: false, difficulty: 2 },
                         ],
                     },
                 ];
@@ -238,6 +238,7 @@ const TriviaGenerator = () => {
                 className="input-form"
                 categoryType={categoryType}
                 setCategoryType={setCategoryType}
+                setFolderNameInput={setFolderNameInput}
                 categoryInput={categoryInput}
                 setCategoryInput={setCategoryInput}
                 numQuestions={numQuestions}
@@ -291,12 +292,6 @@ const TriviaGenerator = () => {
                     ))
                 }
             </div>
-            <TextField
-                id="folderNameInput"
-                label="Output Folder"
-                value={folderNameInput}
-                onChange={(e) => setFolderNameInput(e.target.value)}
-            />
             <Button
                 onClick={handleSave}
                 sx={{
