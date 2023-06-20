@@ -183,8 +183,8 @@ const EditableQuestionAnswerPair = ({
                 }[categoryType]}
             >
                 {uploadButtonEnabled
-                    ? "Upload"
-                    : <s>Upload</s>
+                    ? "Add"
+                    : <s>Add</s>
                 }
             </Button>
             <FormControl component="fieldset">
