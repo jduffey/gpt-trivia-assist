@@ -38,11 +38,11 @@ const TriviaGenerator = () => {
                     {
                         category: categoryInput,
                         questions: [
-                            { question: '', answer: '', questionType: categoryType, isDD: false },
-                            { question: '', answer: '', questionType: categoryType, isDD: false },
-                            { question: '', answer: '', questionType: categoryType, isDD: false },
-                            { question: '', answer: '', questionType: categoryType, isDD: false },
-                            { question: '', answer: '', questionType: categoryType, isDD: false },
+                            { question: '', answer: '', questionType: categoryType, isDD: false, difficulty: 0},
+                            { question: '', answer: '', questionType: categoryType, isDD: false, difficulty: 0},
+                            { question: '', answer: '', questionType: categoryType, isDD: false, difficulty: 1},
+                            { question: '', answer: '', questionType: categoryType, isDD: false, difficulty: 1},
+                            { question: '', answer: '', questionType: categoryType, isDD: false, difficulty: 2},
                         ],
                     },
                 ];
