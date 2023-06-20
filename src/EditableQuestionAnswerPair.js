@@ -39,6 +39,31 @@ const EditableQuestionAnswerPair = ({
     const [isChecked, setIsChecked] = useState(false);
     const [imageAvatar, setImageAvatar] = useState(null);
     const [isImagePreviewOpen, setIsImagePreviewOpen] = useState(false);
+    const [isImageUploadDialogOpen, setIsImageUploadDialogOpen] = useState(false);
+    const [imageUploadUrl, setImageUploadUrl] = useState('');
+
+    const handleImageUploadDialogOpen = () => {
+        setIsImageUploadDialogOpen(true);
+    };
+
+    const handleImageUploadDialogClose = () => {
+        setIsImageUploadDialogOpen(false);
+    };
+
+    const handleURLSubmit = () => {
+        alert("URL is not ready for submission!!");
+        // Fetch the image from the URL and send it to the server
+        // fetch(imageUploadUrl)
+        //     .then((res) => res.blob())
+        //     .then(sendImageToServer)
+        //     .catch((error) => console.error('Error:', error));
+
+        // TODO: Set the question field to the filepath of the image
+        // TODO: need to construct the filepath
+
+        // onQuestionChange(index, imageUploadUrl);
+        // setIsImageUploadDialogOpen(false);
+    };
 
     const handleCheckboxChange = () => {
         setIsChecked(!isChecked);
@@ -78,26 +103,7 @@ const EditableQuestionAnswerPair = ({
     };
 
     const handleImageUploadClick = () => {
-        const input = document.createElement("input");
-        input.type = "file";
-        input.accept = "image/*";
-
-        input.onchange = (event) => {
-            const file = event.target.files[0];
-            const fileName = file.name;
-            const questionFieldText = `J:\\${folderNameInput}\\${categoryName}\\${fileName}`;
-            onQuestionChange(index, questionFieldText);
-
-            const fileNameWithoutExtension = fileName.split('.')[0];
-            onAnswerChange(index, fileNameWithoutExtension);
-
-            const fileURL = URL.createObjectURL(file);
-            setImageAvatar(fileURL);
-
-            sendImageToServer(file);
-        };
-
-        input.click();
+        handleImageUploadDialogOpen();
     };
 
     const handleAudioUploadClick = () => {
@@ -188,6 +194,45 @@ const EditableQuestionAnswerPair = ({
                     : <s>Add</s>
                 }
             </Button>
+            <Dialog open={isImageUploadDialogOpen} onClose={handleImageUploadDialogClose}>
+                <DialogContent>
+                    <TextField
+                        label="Image URL"
+                        fullWidth
+                        value={imageUploadUrl}
+                        onChange={(e) => setImageUploadUrl(e.target.value)}
+                    />
+                    <Button onClick={handleURLSubmit}>Submit</Button>
+                    <input
+                        accept="image/*"
+                        style={{ display: 'none' }}
+                        id="upload-file"
+                        type="file"
+                        onChange={(event) => {
+                            const file = event.target.files[0];
+                            console.log("file:", file);
+                            const fileName = file.name;
+                            const questionFieldText = `J:\\${folderNameInput}\\${categoryName}\\${fileName}`;
+                            onQuestionChange(index, questionFieldText);
+
+                            const fileNameWithoutExtension = fileName.split('.')[0];
+                            onAnswerChange(index, fileNameWithoutExtension);
+
+                            const fileURL = URL.createObjectURL(file);
+                            setImageAvatar(fileURL);
+
+                            sendImageToServer(file);
+
+                            setIsImageUploadDialogOpen(false);
+                        }}
+                    />
+                    <label htmlFor="upload-file">
+                        <Button variant="contained" component="span">
+                            Upload From Local
+                        </Button>
+                    </label>
+                </DialogContent>
+            </Dialog>
             <FormControl component="fieldset">
                 <RadioGroup
                     row
