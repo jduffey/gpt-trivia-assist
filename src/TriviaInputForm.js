@@ -14,6 +14,7 @@ const TriviaInputForm = ({
     setCategoryType,
     categoryInput,
     setCategoryInput,
+    setFolderNameInput,
     numQuestions,
     setNumQuestions,
     onSubmit,
@@ -53,6 +54,11 @@ const TriviaInputForm = ({
 
     return (
         <form onSubmit={handleSubmit} className="trivia-form">
+            <TextField
+                id="folderNameInput"
+                label="Output Folder"
+                onChange={(e) => setFolderNameInput(e.target.value)}
+            />
             <FormControl component="fieldset">
                 <RadioGroup
                     row
