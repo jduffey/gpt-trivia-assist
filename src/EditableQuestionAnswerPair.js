@@ -66,6 +66,24 @@ const EditableQuestionAnswerPair = ({
         setDailyDouble(index, !isChecked);
     }
 
+    const handleUploadImageFromLocalSubmit = (event) => {
+        const file = event.target.files[0];
+        console.log("file:", file);
+        const fileName = file.name;
+        const questionFieldText = `J:\\${folderNameInput}\\${categoryName}\\${fileName}`;
+        onQuestionChange(index, questionFieldText);
+
+        const fileNameWithoutExtension = fileName.split('.')[0];
+        onAnswerChange(index, fileNameWithoutExtension);
+
+        const fileURL = URL.createObjectURL(file);
+        setImageAvatar(fileURL);
+
+        sendImageToServer(file);
+
+        setIsImageUploadDialogOpen(false);
+    }
+
     const sendImageToServer = (file) => {
         const formData = new FormData();
         formData.append('imageFile', file);
@@ -200,23 +218,7 @@ const EditableQuestionAnswerPair = ({
                         style={{ display: 'none' }}
                         id="upload-file"
                         type="file"
-                        onChange={(event) => {
-                            const file = event.target.files[0];
-                            console.log("file:", file);
-                            const fileName = file.name;
-                            const questionFieldText = `J:\\${folderNameInput}\\${categoryName}\\${fileName}`;
-                            onQuestionChange(index, questionFieldText);
-
-                            const fileNameWithoutExtension = fileName.split('.')[0];
-                            onAnswerChange(index, fileNameWithoutExtension);
-
-                            const fileURL = URL.createObjectURL(file);
-                            setImageAvatar(fileURL);
-
-                            sendImageToServer(file);
-
-                            setIsImageUploadDialogOpen(false);
-                        }}
+                        onChange={handleUploadImageFromLocalSubmit}
                     />
                     <label htmlFor="upload-file">
                         <Button variant="contained" component="span">
