@@ -120,7 +120,7 @@ const EditableQuestionAnswerPair = ({
         input.click();
     };
 
-    const uploadButtonEnabled = ['P', 'S'].includes(categoryType);
+    const addMediaButtonEnabled = ['P', 'S'].includes(categoryType);
 
     return (
         <div className="question-answer-pair">
@@ -164,8 +164,8 @@ const EditableQuestionAnswerPair = ({
             />
             <Typography variant="body1">Q {index + 1}</Typography>
             <Button
-                disabled={!uploadButtonEnabled}
-                sx={uploadButtonEnabled
+                disabled={!addMediaButtonEnabled}
+                sx={addMediaButtonEnabled
                     ? {
                         backgroundColor: '#3f51b5',
                         color: '#ffffff',
@@ -182,9 +182,9 @@ const EditableQuestionAnswerPair = ({
                     'S': handleAudioUploadClick,
                 }[categoryType]}
             >
-                {uploadButtonEnabled
-                    ? "Upload"
-                    : <s>Upload</s>
+                {addMediaButtonEnabled
+                    ? "Add"
+                    : <s>Add</s>
                 }
             </Button>
             <FormControl component="fieldset">
