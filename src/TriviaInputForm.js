@@ -43,7 +43,7 @@ const TriviaInputForm = ({
     const handleSubmit = (e) => {
         e.preventDefault();
         if (!existingCategoriesHaveDifficultiesSelected) {
-            alert("PLACEHOLDER for checking selected difficulties...");
+            alert('All existing categories must have five difficulties selected.');
             return;
         }
         if (categoryInput === '') {
