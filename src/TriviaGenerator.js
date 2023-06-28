@@ -222,6 +222,17 @@ const TriviaGenerator = () => {
         });
     };
 
+    const existingCategoriesHaveDifficultiesSelected = () => {
+        if (questionsByCategory.length === 0) return true;
+        return questionsByCategory.every((categoryObj) => {
+            return (
+                categoryObj.questions.filter(
+                    (question) => typeof question.difficulty !== "undefined"
+                ).length === 5
+            );
+        });
+    }
+
     return (
         <Container
             sx={{
@@ -245,6 +256,7 @@ const TriviaGenerator = () => {
                 setNumQuestions={setNumQuestions}
                 onSubmit={handleSubmit}
                 dataLoaded={dataLoaded}
+                existingCategoriesHaveDifficultiesSelected={existingCategoriesHaveDifficultiesSelected()}
             />
             {error && <p className="error-message">{error}</p>}
             <div className="questions-container">
