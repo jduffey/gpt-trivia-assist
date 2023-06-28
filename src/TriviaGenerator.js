@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
-import { Button, Container } from '@mui/material';
+import { Button, Container, Grid } from '@mui/material';
 
 import EditableCategoryName from './EditableCategoryName';
 import EditableQuestionAnswerPair from './EditableQuestionAnswerPair';
@@ -264,22 +264,28 @@ const TriviaGenerator = () => {
                 {
                     questionsByCategory.map((categoryObj) => (
                         <div key={categoryObj.category} className="category">
-                            <h3 onClick={() => setCollapsed({ ...collapsed, [categoryObj.category]: !collapsed[categoryObj.category] })}>
-                                {collapsed[categoryObj.category] ? String.fromCharCode(0x02192) : String.fromCharCode(0x02193)}
-                            </h3>
-                            <EditableCategoryName
-                                categoryName={categoryObj.category}
-                                onCategoryNameChange={(newCategoryName) => {
-                                    setQuestionsByCategory((prevState) => {
-                                        const updatedQuestionsByCategory = [...prevState];
-                                        const categoryIndex = updatedQuestionsByCategory.findIndex(
-                                            (item) => item.category === categoryObj.category
-                                        );
-                                        updatedQuestionsByCategory[categoryIndex].category = newCategoryName;
-                                        return updatedQuestionsByCategory;
-                                    });
-                                }}
-                            />
+                            <Grid container>
+                                <Grid item>
+                                    <EditableCategoryName
+                                        categoryName={categoryObj.category}
+                                        onCategoryNameChange={(newCategoryName) => {
+                                            setQuestionsByCategory((prevState) => {
+                                                const updatedQuestionsByCategory = [...prevState];
+                                                const categoryIndex = updatedQuestionsByCategory.findIndex(
+                                                    (item) => item.category === categoryObj.category
+                                                );
+                                                updatedQuestionsByCategory[categoryIndex].category = newCategoryName;
+                                                return updatedQuestionsByCategory;
+                                            });
+                                        }}
+                                    />
+                                </Grid>
+                                <Grid item>
+                                    <h3 style={{ marginLeft: "10px" }} onClick={() => setCollapsed({ ...collapsed, [categoryObj.category]: !collapsed[categoryObj.category] })}>
+                                        {collapsed[categoryObj.category] ? String.fromCharCode(0x02192) : String.fromCharCode(0x02193)}
+                                    </h3>
+                                </Grid>
+                            </Grid>
                             {!collapsed[categoryObj.category] && categoryObj.questions.map((questionObj, index) => (
                                 <EditableQuestionAnswerPair
                                     key={index}

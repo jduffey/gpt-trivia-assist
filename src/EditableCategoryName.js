@@ -22,7 +22,7 @@ const EditableCategoryName = ({
             value={localCategoryName}
             onChange={handleChange}
             onBlur={handleBlur}
-            sx={{ width: '25%' }}
+            fullWidth
         />
     )
 }
