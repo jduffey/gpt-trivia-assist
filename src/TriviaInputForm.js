@@ -40,13 +40,13 @@ const TriviaInputForm = ({
     }, [dataLoaded]);
 
     const handleSubmit = (e) => {
+        e.preventDefault();
         if (categoryInput === '') {
             alert('Please enter a category');
             return;
         };
-        e.preventDefault();
-        setElapsedSeconds(0);
         if (categoryType === 'T') {
+            setElapsedSeconds(0);
             setTimerActive(true)
         };
         onSubmit(e);
