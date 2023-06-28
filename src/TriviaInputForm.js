@@ -19,6 +19,7 @@ const TriviaInputForm = ({
     setNumQuestions,
     onSubmit,
     dataLoaded,
+    existingCategoriesHaveDifficultiesSelected
 }) => {
     const [elapsedSeconds, setElapsedSeconds] = useState(0);
     const [timerActive, setTimerActive] = useState(false);
@@ -41,6 +42,10 @@ const TriviaInputForm = ({
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        if (!existingCategoriesHaveDifficultiesSelected) {
+            alert('All existing categories must have five difficulties selected.');
+            return;
+        }
         if (categoryInput === '') {
             alert('Please enter a category');
             return;
