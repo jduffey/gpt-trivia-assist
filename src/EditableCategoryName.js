@@ -1,19 +1,29 @@
-import React from 'react';
+import React, { useState } from 'react';
+
+import { TextField } from '@mui/material';
 
 const EditableCategoryName = ({
     categoryName,
-    onCollapseChange
+    onCategoryNameChange
 }) => {
+    const [localCategoryName, setLocalCategoryName] = useState(categoryName);
+
+    const handleBlur = () => {
+        onCategoryNameChange(localCategoryName);
+    };
+
+    const handleChange = (event) => {
+        setLocalCategoryName(event.target.value);
+    };
+
     return (
-        <div
-            onClick={onCollapseChange}
-            style={{
-                fontSize: '1.5rem',
-                fontWeight: 'bold',
-            }}
-        >
-            {categoryName}
-        </div>
+        <TextField
+            label="Category Name"
+            value={localCategoryName}
+            onChange={handleChange}
+            onBlur={handleBlur}
+            sx={{ width: '25%' }}
+        />
     )
 }
 

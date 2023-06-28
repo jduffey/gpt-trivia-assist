@@ -269,7 +269,16 @@ const TriviaGenerator = () => {
                             </h3>
                             <EditableCategoryName
                                 categoryName={categoryObj.category}
-                                onCollapseChange={() => setCollapsed({ ...collapsed, [categoryObj.category]: !collapsed[categoryObj.category] })}
+                                onCategoryNameChange={(newCategoryName) => {
+                                    setQuestionsByCategory((prevState) => {
+                                        const updatedQuestionsByCategory = [...prevState];
+                                        const categoryIndex = updatedQuestionsByCategory.findIndex(
+                                            (item) => item.category === categoryObj.category
+                                        );
+                                        updatedQuestionsByCategory[categoryIndex].category = newCategoryName;
+                                        return updatedQuestionsByCategory;
+                                    });
+                                }}
                             />
                             {!collapsed[categoryObj.category] && categoryObj.questions.map((questionObj, index) => (
                                 <EditableQuestionAnswerPair
