@@ -3,6 +3,7 @@ import axios from 'axios';
 
 import { Button, Container } from '@mui/material';
 
+import EditableCategoryName from './EditableCategoryName';
 import EditableQuestionAnswerPair from './EditableQuestionAnswerPair';
 import TriviaInputForm from './TriviaInputForm';
 
@@ -264,8 +265,12 @@ const TriviaGenerator = () => {
                     questionsByCategory.map((categoryObj) => (
                         <div key={categoryObj.category} className="category">
                             <h3 onClick={() => setCollapsed({ ...collapsed, [categoryObj.category]: !collapsed[categoryObj.category] })}>
-                                {categoryObj.category} {collapsed[categoryObj.category] ? String.fromCharCode(0x02192) : String.fromCharCode(0x02193)}
+                                {collapsed[categoryObj.category] ? String.fromCharCode(0x02192) : String.fromCharCode(0x02193)}
                             </h3>
+                            <EditableCategoryName
+                                categoryName={categoryObj.category}
+                                onCollapseChange={() => setCollapsed({ ...collapsed, [categoryObj.category]: !collapsed[categoryObj.category] })}
+                            />
                             {!collapsed[categoryObj.category] && categoryObj.questions.map((questionObj, index) => (
                                 <EditableQuestionAnswerPair
                                     key={index}
