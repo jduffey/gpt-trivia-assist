@@ -36,7 +36,7 @@ const getApiCall = async (data, numQuestions) => {
                     data: {
                         choices: [
                             {
-                                text: 'Q: What is the capital of Ohio?\nA: Columbus.\n'.repeat(numQuestions)
+                                text: 'Q: Am I running in dev mode using mocked API calls?\nA: Yes, I am.\n'.repeat(numQuestions)
                             }
                         ]
                     }
