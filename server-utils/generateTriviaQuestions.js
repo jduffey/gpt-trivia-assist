@@ -41,7 +41,7 @@ const getApiCall = async (data, numQuestions) => {
                         ]
                     }
                 });
-            }, 1000); // <-- If we want to adjust the delay, e.g. for testing the seconds-elapsed timer.
+            }, 1000);
         });
     } else {
         return await openai.createCompletion(data);
