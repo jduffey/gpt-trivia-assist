@@ -8,10 +8,10 @@ const { convertAndSave } = require('./server-utils/convertAndSave');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-const dirPath = path.join(__dirname, 'media-files');
+const mediaFilesOutputDirPath = path.join(__dirname, 'media-files');
 
-if (!fs.existsSync(dirPath)) {
-    fs.mkdirSync(dirPath);
+if (!fs.existsSync(mediaFilesOutputDirPath)) {
+    fs.mkdirSync(mediaFilesOutputDirPath);
 }
 
 const handleGenerate = async (req, res) => {
@@ -42,7 +42,7 @@ const handleSave = async (req, res) => {
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, dirPath)
+        cb(null, mediaFilesOutputDirPath)
     },
     filename: function (req, file, cb) {
         cb(null, file.originalname)
@@ -54,9 +54,21 @@ const upload = multer({ storage: storage })
 app.use(express.json());
 app.post('/generate', handleGenerate);
 app.post('/save', handleSave);
-app.post('/copy-image', upload.single('imageFile'), (req, res) => {
-    res.send('Image received and stored');
+app.post('/create-image-category-folder', (req, res) => {
+    const { categoryName } = req.body;
+    const categoryFolderPath = path.join(mediaFilesOutputDirPath, categoryName);
+    if (!fs.existsSync(categoryFolderPath)) {
+        fs.mkdirSync(categoryFolderPath);
+    }
+    res.status(200).json({ message: 'Category folder created successfully' });
 });
+app.post(
+    '/copy-image',
+    upload.single('imageFile'),
+    (req, res) => {
+        res.send('Image received and stored');
+    }
+);
 app.post('/copy-audio', upload.single('audioFile'), (req, res) => {
     res.send('Audio file received and stored');
 });

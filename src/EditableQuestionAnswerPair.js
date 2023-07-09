@@ -45,9 +45,27 @@ const EditableQuestionAnswerPair = ({
         setDailyDouble(index, !isChecked);
     }
 
-    const sendImageToServer = (file) => {
+    const createImageCategoryDirectory = (categoryName) => {
+        fetch('/create-image-category-folder', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ categoryName }),
+        }).then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        }).catch(error => {
+            console.error('There has been a problem with your fetch operation:', error);
+        });
+    };
+
+    const sendImageToServer = (file, catName) => {
         const formData = new FormData();
         formData.append('imageFile', file);
+        // formData.append('categoryName', catName);
         fetch('/copy-image', {
             method: 'POST',
             body: formData,
@@ -94,7 +112,8 @@ const EditableQuestionAnswerPair = ({
             const fileURL = URL.createObjectURL(file);
             setImageAvatar(fileURL);
 
-            sendImageToServer(file);
+            createImageCategoryDirectory(categoryName);
+            sendImageToServer(file, categoryName);
         };
 
         input.click();
