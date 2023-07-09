@@ -42,14 +42,20 @@ const handleSave = async (req, res) => {
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, mediaFilesOutputDirPath)
+        const categoryName = req.query.categoryName;
+        const categoryFolderPath = path.join(mediaFilesOutputDirPath, categoryName);
+        if (!fs.existsSync(categoryFolderPath)) {
+            fs.mkdirSync(categoryFolderPath);
+        }
+        cb(null, categoryFolderPath);
     },
     filename: function (req, file, cb) {
-        cb(null, file.originalname)
+        cb(null, file.originalname);
     }
 });
 
-const upload = multer({ storage: storage })
+const upload = multer({ storage: storage });
+
 
 app.use(express.json());
 app.post('/generate', handleGenerate);
