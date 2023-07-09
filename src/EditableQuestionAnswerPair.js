@@ -62,7 +62,7 @@ const EditableQuestionAnswerPair = ({
         });
     };
 
-    const sendImageToServer = (file, catName) => {
+    const sendImageToServer = (file) => {
         const formData = new FormData();
         formData.append('imageFile', file);
         fetch(`/copy-image?categoryName=${categoryName}`, {
@@ -112,7 +112,7 @@ const EditableQuestionAnswerPair = ({
             setImageAvatar(fileURL);
 
             createImageCategoryDirectory(categoryName);
-            sendImageToServer(file, categoryName);
+            sendImageToServer(file);
         };
 
         input.click();
