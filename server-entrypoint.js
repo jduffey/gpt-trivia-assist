@@ -10,12 +10,16 @@ const PORT = process.env.PORT || 3000;
 
 const mediaFilesOutputDirPath = path.join(__dirname, 'media-files');
 const imagesOutputDirPath = path.join(mediaFilesOutputDirPath, 'images');
+const audioOutputDirPath = path.join(mediaFilesOutputDirPath, 'audio');
 
 if (!fs.existsSync(mediaFilesOutputDirPath)) {
     fs.mkdirSync(mediaFilesOutputDirPath);
 }
 if (!fs.existsSync(imagesOutputDirPath)) {
     fs.mkdirSync(imagesOutputDirPath);
+}
+if (!fs.existsSync(audioOutputDirPath)) {
+    fs.mkdirSync(audioOutputDirPath);
 }
 
 const handleGenerate = async (req, res) => {
@@ -52,7 +56,9 @@ const storage = multer.diskStorage({
         if (fileType === 'image') {
             fileFolderPath = path.join(imagesOutputDirPath, categoryName);
         }
-        // TODO: if (fileType === 'audio') { ... }
+        if (fileType === 'audio') {
+            fileFolderPath = path.join(audioOutputDirPath, categoryName);
+        }
         if (!fs.existsSync(fileFolderPath)) {
             fs.mkdirSync(fileFolderPath);
         }
@@ -69,14 +75,26 @@ const upload = multer({ storage: storage });
 app.use(express.json());
 app.post('/generate', handleGenerate);
 app.post('/save', handleSave);
-app.post('/create-image-category-folder', (req, res) => {
-    const { categoryName } = req.body;
-    const categoryFolderPath = path.join(imagesOutputDirPath, categoryName);
-    if (!fs.existsSync(categoryFolderPath)) {
-        fs.mkdirSync(categoryFolderPath);
-    }
-    res.status(200).json({ message: 'Category folder created successfully' });
-});
+app.post(
+    '/create-image-category-folder',
+    (req, res) => {
+        const { categoryName } = req.body;
+        const categoryFolderPath = path.join(imagesOutputDirPath, categoryName);
+        if (!fs.existsSync(categoryFolderPath)) {
+            fs.mkdirSync(categoryFolderPath);
+        }
+        res.status(200).json({ message: 'Category folder created successfully' });
+    });
+app.post(
+    '/create-audio-category-folder',
+    (req, res) => {
+        const { categoryName } = req.body;
+        const categoryFolderPath = path.join(audioOutputDirPath, categoryName);
+        if (!fs.existsSync(categoryFolderPath)) {
+            fs.mkdirSync(categoryFolderPath);
+        }
+        res.status(200).json({ message: 'Category folder created successfully' });
+    });
 app.post(
     '/copy-image',
     upload.single('imageFile'),
@@ -84,9 +102,13 @@ app.post(
         res.send('Image received and stored');
     }
 );
-app.post('/copy-audio', upload.single('audioFile'), (req, res) => {
-    res.send('Audio file received and stored');
-});
+app.post(
+    '/copy-audio',
+    upload.single('audioFile'),
+    (req, res) => {
+        res.send('Audio file received and stored');
+    }
+);
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
 });
