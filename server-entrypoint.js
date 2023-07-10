@@ -11,16 +11,15 @@ const PORT = process.env.PORT || 3000;
 const mediaFilesOutputDirPath = path.join(__dirname, 'media-files');
 const imagesOutputDirPath = path.join(mediaFilesOutputDirPath, 'images');
 const audioOutputDirPath = path.join(mediaFilesOutputDirPath, 'audio');
-
-if (!fs.existsSync(mediaFilesOutputDirPath)) {
-    fs.mkdirSync(mediaFilesOutputDirPath);
-}
-if (!fs.existsSync(imagesOutputDirPath)) {
-    fs.mkdirSync(imagesOutputDirPath);
-}
-if (!fs.existsSync(audioOutputDirPath)) {
-    fs.mkdirSync(audioOutputDirPath);
-}
+[
+    mediaFilesOutputDirPath,
+    imagesOutputDirPath,
+    audioOutputDirPath
+].forEach(dirPath => {
+    if (!fs.existsSync(dirPath)) {
+        fs.mkdirSync(dirPath);
+    }
+});
 
 const handleGenerate = async (req, res) => {
     console.log('Request body sent from client:');
@@ -52,13 +51,10 @@ const storage = multer.diskStorage({
     destination: function (req, file, cb) {
         const fileType = req.query.fileType;
         const categoryName = req.query.categoryName;
-        let fileFolderPath = mediaFilesOutputDirPath;
-        if (fileType === 'image') {
-            fileFolderPath = path.join(imagesOutputDirPath, categoryName);
-        }
-        if (fileType === 'audio') {
-            fileFolderPath = path.join(audioOutputDirPath, categoryName);
-        }
+        const fileFolderPath = {
+            'image': path.join(imagesOutputDirPath, categoryName),
+            'audio': path.join(audioOutputDirPath, categoryName),
+        }[fileType];
         if (!fs.existsSync(fileFolderPath)) {
             fs.mkdirSync(fileFolderPath);
         }
