@@ -72,26 +72,6 @@ app.use(express.json());
 app.post('/generate', handleGenerate);
 app.post('/save', handleSave);
 app.post(
-    '/create-image-category-folder',
-    (req, res) => {
-        const { categoryName } = req.body;
-        const categoryFolderPath = path.join(imagesOutputDirPath, categoryName);
-        if (!fs.existsSync(categoryFolderPath)) {
-            fs.mkdirSync(categoryFolderPath);
-        }
-        res.status(200).json({ message: 'Category folder created successfully' });
-    });
-app.post(
-    '/create-audio-category-folder',
-    (req, res) => {
-        const { categoryName } = req.body;
-        const categoryFolderPath = path.join(audioOutputDirPath, categoryName);
-        if (!fs.existsSync(categoryFolderPath)) {
-            fs.mkdirSync(categoryFolderPath);
-        }
-        res.status(200).json({ message: 'Category folder created successfully' });
-    });
-app.post(
     '/copy-image',
     upload.single('imageFile'),
     (req, res) => {
