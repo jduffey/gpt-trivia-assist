@@ -65,7 +65,8 @@ const EditableQuestionAnswerPair = ({
     const sendImageToServer = (file) => {
         const formData = new FormData();
         formData.append('imageFile', file);
-        fetch(`/copy-image?categoryName=${categoryName}`, {
+        const fileType = 'image';
+        fetch(`/copy-image?fileType=${fileType}&categoryName=${categoryName}`, {
             method: 'POST',
             body: formData,
         }).then(response => {

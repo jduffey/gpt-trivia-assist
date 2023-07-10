@@ -9,9 +9,13 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 const mediaFilesOutputDirPath = path.join(__dirname, 'media-files');
+const imagesOutputDirPath = path.join(mediaFilesOutputDirPath, 'images');
 
 if (!fs.existsSync(mediaFilesOutputDirPath)) {
     fs.mkdirSync(mediaFilesOutputDirPath);
+}
+if (!fs.existsSync(imagesOutputDirPath)) {
+    fs.mkdirSync(imagesOutputDirPath);
 }
 
 const handleGenerate = async (req, res) => {
@@ -42,12 +46,17 @@ const handleSave = async (req, res) => {
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
+        const fileType = req.query.fileType;
         const categoryName = req.query.categoryName;
-        const categoryFolderPath = path.join(mediaFilesOutputDirPath, categoryName);
-        if (!fs.existsSync(categoryFolderPath)) {
-            fs.mkdirSync(categoryFolderPath);
+        let fileFolderPath = mediaFilesOutputDirPath;
+        if (fileType === 'image') {
+            fileFolderPath = path.join(imagesOutputDirPath, categoryName);
         }
-        cb(null, categoryFolderPath);
+        // TODO: if (fileType === 'audio') { ... }
+        if (!fs.existsSync(fileFolderPath)) {
+            fs.mkdirSync(fileFolderPath);
+        }
+        cb(null, fileFolderPath);
     },
     filename: function (req, file, cb) {
         cb(null, file.originalname);
@@ -62,7 +71,7 @@ app.post('/generate', handleGenerate);
 app.post('/save', handleSave);
 app.post('/create-image-category-folder', (req, res) => {
     const { categoryName } = req.body;
-    const categoryFolderPath = path.join(mediaFilesOutputDirPath, categoryName);
+    const categoryFolderPath = path.join(imagesOutputDirPath, categoryName);
     if (!fs.existsSync(categoryFolderPath)) {
         fs.mkdirSync(categoryFolderPath);
     }
