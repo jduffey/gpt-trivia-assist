@@ -83,13 +83,18 @@ const EditableQuestionAnswerPair = ({
         if (question) {
             fetch(`/fetch-image?imageURL=${question}&categoryName=${categoryName}`, {
                 method: 'POST',
-            }).then(response => {
-                console.log(response);
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.blob();
             })
+                .then(res => res.json())
+                .then(data => {
+                    console.log(data);
+                    const imageName = data.imageFileName;
+                    onQuestionChange(index, `J:\\${folderNameInput}\\${categoryName}\\${imageName}`);
+                    onAnswerChange(index, imageName.split('.')[0]);
+                    if (!data.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return data.blob();
+                })
 
             return;
         }

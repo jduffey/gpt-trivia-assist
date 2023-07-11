@@ -86,7 +86,6 @@ const fetchImage = async (req, res) => {
             responseType: 'stream',
         });
 
-        // console.log(response.data);
         const imageFileName = imageURL.split('/').pop();
         console.log(`Image file name: ${imageFileName}`);
         const originalImageFilePath = path.join(originalImagesOutputDirPath, imageFileName);
@@ -109,7 +108,10 @@ const fetchImage = async (req, res) => {
             .jpeg()
             .toFile(outputFile);
 
-        res.status(200).json({ message: 'Image fetched, converted and saved successfully' });
+        res.status(200).json({
+            message: 'Image fetched, converted and saved successfully',
+            imageFileName: outputFilename,
+        });
     } catch (error) {
         console.error(`Error fetching image: ${error}`);
         res.status(500).json({ message: 'Server error' });
