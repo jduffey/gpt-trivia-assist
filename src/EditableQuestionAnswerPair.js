@@ -48,7 +48,8 @@ const EditableQuestionAnswerPair = ({
     const sendImageToServer = (file) => {
         const formData = new FormData();
         formData.append('imageFile', file);
-        fetch('/copy-image', {
+        const fileType = 'image';
+        fetch(`/copy-image?fileType=${fileType}&categoryName=${categoryName}`, {
             method: 'POST',
             body: formData,
         }).then(response => {
@@ -64,7 +65,8 @@ const EditableQuestionAnswerPair = ({
     const sendAudioToServer = (file) => {
         const formData = new FormData();
         formData.append('audioFile', file);
-        fetch('/copy-audio', {
+        const fileType = 'audio';
+        fetch(`/copy-audio?fileType=${fileType}&categoryName=${categoryName}`, {
             method: 'POST',
             body: formData,
         }).then(response => {

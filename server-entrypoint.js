@@ -3,16 +3,26 @@ const path = require('path');
 
 const express = require('express');
 const multer = require('multer');
+const sharp = require('sharp');
 const { generateTriviaQuestions } = require('./server-utils/generateTriviaQuestions');
 const { convertAndSave } = require('./server-utils/convertAndSave');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-const dirPath = path.join(__dirname, 'media-files');
-
-if (!fs.existsSync(dirPath)) {
-    fs.mkdirSync(dirPath);
-}
+const mediaFilesOutputDirPath = path.join(__dirname, 'media-files');
+const imagesOutputDirPath = path.join(mediaFilesOutputDirPath, 'images');
+const originalImagesOutputDirPath = path.join(mediaFilesOutputDirPath, 'original-images');
+const audioOutputDirPath = path.join(mediaFilesOutputDirPath, 'audio');
+[
+    mediaFilesOutputDirPath,
+    imagesOutputDirPath,
+    originalImagesOutputDirPath,
+    audioOutputDirPath
+].forEach(dirPath => {
+    if (!fs.existsSync(dirPath)) {
+        fs.mkdirSync(dirPath);
+    }
+});
 
 const handleGenerate = async (req, res) => {
     console.log('Request body sent from client:');
@@ -42,24 +52,65 @@ const handleSave = async (req, res) => {
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, dirPath)
+        const fileType = req.query.fileType;
+        const categoryName = req.query.categoryName;
+        const fileFolderPath = {
+            'image': path.join(originalImagesOutputDirPath, categoryName),
+            'audio': path.join(audioOutputDirPath, categoryName),
+        }[fileType];
+        if (!fs.existsSync(fileFolderPath)) {
+            fs.mkdirSync(fileFolderPath);
+        }
+        cb(null, fileFolderPath);
     },
     filename: function (req, file, cb) {
-        cb(null, file.originalname)
+        cb(null, file.originalname);
     }
 });
 
-const upload = multer({ storage: storage })
+const upload = multer({ storage: storage });
 
 app.use(express.json());
 app.post('/generate', handleGenerate);
 app.post('/save', handleSave);
-app.post('/copy-image', upload.single('imageFile'), (req, res) => {
-    res.send('Image received and stored');
-});
-app.post('/copy-audio', upload.single('audioFile'), (req, res) => {
-    res.send('Audio file received and stored');
-});
+app.post(
+    '/copy-image',
+    upload.single('imageFile'),
+    async (req, res, next) => {
+        const categoryName = req.query.categoryName;
+        const categoryFolderPath = path.join(imagesOutputDirPath, categoryName);
+        if (!fs.existsSync(categoryFolderPath)) {
+            fs.mkdirSync(categoryFolderPath);
+        }
+
+        const inputFile = req.file.path;
+        const outputFile = path.join(categoryFolderPath, req.file.originalname);
+
+        try {
+            await sharp(inputFile)
+                .resize(1920, 1080, {
+                    fit: 'inside'
+                })
+                .toFile(outputFile);
+
+            next();
+        } catch (err) {
+            console.log("Sharp error: ", err);
+            res.status(500).json({ message: 'Error resizing image' });
+        }
+    },
+    (req, res) => {
+        res.send('Image received, stored, and resized');
+    }
+);
+
+app.post(
+    '/copy-audio',
+    upload.single('audioFile'),
+    (req, res) => {
+        res.send('Audio file received and stored');
+    }
+);
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
 });
