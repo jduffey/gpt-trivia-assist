@@ -22,6 +22,32 @@ const parseQaPairs = rawQuestions => {
         }));
 };
 
+const getApiCall = async (data, numQuestions) => {
+    if (process.argv.includes('--mockApi')) {
+        console.log(`\
+👷‍♂️👷‍♂️------------------👷‍♂️👷‍♂️------------------👷‍♂️👷‍♂️
+             You are in DEV mode!
+          API calls will be mocked.
+👷‍♂️👷‍♂️------------------👷‍♂️👷‍♂️------------------👷‍♂️👷‍♂️`);
+
+        return new Promise((resolve) => {
+            setTimeout(() => {
+                resolve({
+                    data: {
+                        choices: [
+                            {
+                                text: 'Q: Am I running in dev mode using mocked API calls?\nA: Yes, I am.\n'.repeat(numQuestions)
+                            }
+                        ]
+                    }
+                });
+            }, 1000);
+        });
+    } else {
+        return await openai.createCompletion(data);
+    }
+};
+
 const generateTriviaQuestions = async (category, numQuestions) => {
     try {
         const prompt = buildPrompt(category, numQuestions);
@@ -34,7 +60,7 @@ const generateTriviaQuestions = async (category, numQuestions) => {
         console.log('🟢 Querying ChatGPT API with the following params: 🟢');
         console.log(data);
 
-        const response = await openai.createCompletion(data);
+        const response = await getApiCall(data, numQuestions);
         console.log('🟢 Response (response.data) from ChatGPT API: 🟢');
         console.log(response.data);
         const text = formatApiResponse(response);
