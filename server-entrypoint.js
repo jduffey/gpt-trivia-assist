@@ -3,7 +3,6 @@ const path = require('path');
 const axios = require('axios');
 const stream = require('stream');
 const { promisify } = require('util');
-const { v4: uuidv4 } = require('uuid');
 
 const pipeline = promisify(stream.pipeline);
 
@@ -77,20 +76,20 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 const fetchImage = async (req, res) => {
-    const imageURL = req.query.imageURL;
-    console.log(`Fetching image from ${imageURL}`);
-
-    const imageFileName = uuidv4();
-    const originalImageFilePath = path.join(originalImagesOutputDirPath, imageFileName + ".jpg");
-
     try {
+        const imageURL = req.query.imageURL;
+        console.log(`Fetching image from ${imageURL}`);
+
         const response = await axios({
             url: imageURL,
             method: 'GET',
             responseType: 'stream',
         });
 
-        console.log(response.data);
+        // console.log(response.data);
+        const imageFileName = imageURL.split('/').pop();
+        console.log(`Image file name: ${imageFileName}`);
+        const originalImageFilePath = path.join(originalImagesOutputDirPath, imageFileName);
 
         await pipeline(response.data, fs.createWriteStream(originalImageFilePath));
 
@@ -100,7 +99,7 @@ const fetchImage = async (req, res) => {
             fs.mkdirSync(categoryFolderPath);
         }
 
-        const outputFilename = imageFileName + ".jpg";
+        const outputFilename = imageFileName.split('.')[0] + ".jpg";
         const outputFile = path.join(categoryFolderPath, outputFilename);
 
         await sharp(originalImageFilePath)
