@@ -3,6 +3,7 @@ const path = require('path');
 
 const express = require('express');
 const multer = require('multer');
+const sharp = require('sharp');
 const { generateTriviaQuestions } = require('./server-utils/generateTriviaQuestions');
 const { convertAndSave } = require('./server-utils/convertAndSave');
 const app = express();
@@ -10,10 +11,12 @@ const PORT = process.env.PORT || 3000;
 
 const mediaFilesOutputDirPath = path.join(__dirname, 'media-files');
 const imagesOutputDirPath = path.join(mediaFilesOutputDirPath, 'images');
+const originalImagesOutputDirPath = path.join(mediaFilesOutputDirPath, 'original-images');
 const audioOutputDirPath = path.join(mediaFilesOutputDirPath, 'audio');
 [
     mediaFilesOutputDirPath,
     imagesOutputDirPath,
+    originalImagesOutputDirPath,
     audioOutputDirPath
 ].forEach(dirPath => {
     if (!fs.existsSync(dirPath)) {
@@ -52,7 +55,7 @@ const storage = multer.diskStorage({
         const fileType = req.query.fileType;
         const categoryName = req.query.categoryName;
         const fileFolderPath = {
-            'image': path.join(imagesOutputDirPath, categoryName),
+            'image': path.join(originalImagesOutputDirPath, categoryName),
             'audio': path.join(audioOutputDirPath, categoryName),
         }[fileType];
         if (!fs.existsSync(fileFolderPath)) {
@@ -67,17 +70,40 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 
-
 app.use(express.json());
 app.post('/generate', handleGenerate);
 app.post('/save', handleSave);
 app.post(
     '/copy-image',
     upload.single('imageFile'),
+    async (req, res, next) => {
+        const categoryName = req.query.categoryName;
+        const categoryFolderPath = path.join(imagesOutputDirPath, categoryName);
+        if (!fs.existsSync(categoryFolderPath)) {
+            fs.mkdirSync(categoryFolderPath);
+        }
+
+        const inputFile = req.file.path;
+        const outputFile = path.join(categoryFolderPath, req.file.originalname);
+
+        try {
+            await sharp(inputFile)
+                .resize(1920, 1080, {
+                    fit: 'inside'
+                })
+                .toFile(outputFile);
+
+            next();
+        } catch (err) {
+            console.log("Sharp error: ", err);
+            res.status(500).json({ message: 'Error resizing image' });
+        }
+    },
     (req, res) => {
-        res.send('Image received and stored');
+        res.send('Image received, stored, and resized');
     }
 );
+
 app.post(
     '/copy-audio',
     upload.single('audioFile'),
