@@ -87,10 +87,15 @@ const EditableQuestionAnswerPair = ({
         input.onchange = (event) => {
             const file = event.target.files[0];
             const fileName = file.name;
-            const questionFieldText = `J:\\${folderNameInput}\\${categoryName}\\${fileName}`;
+            const fileNameWithoutExtension = fileName.split('.')[0];
+            const fileNameAsDotJpg = fileNameWithoutExtension + '.jpg';
+
+            // "J" is the drive letter of the USB drive used on the primary hosting computer
+            const driveLetter = 'J';
+
+            const questionFieldText = `${driveLetter}:\\${folderNameInput}\\${categoryName}\\${fileNameAsDotJpg}`;
             onQuestionChange(index, questionFieldText);
 
-            const fileNameWithoutExtension = fileName.split('.')[0];
             onAnswerChange(index, fileNameWithoutExtension);
 
             const fileURL = URL.createObjectURL(file);

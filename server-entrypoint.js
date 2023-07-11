@@ -84,13 +84,15 @@ app.post(
         }
 
         const inputFile = req.file.path;
-        const outputFile = path.join(categoryFolderPath, req.file.originalname);
+        const outputFilename = path.parse(req.file.originalname).name + ".jpg";
+        const outputFile = path.join(categoryFolderPath, outputFilename);
 
         try {
             await sharp(inputFile)
                 .resize(1920, 1080, {
                     fit: 'inside'
                 })
+                .jpeg()
                 .toFile(outputFile);
 
             next();
