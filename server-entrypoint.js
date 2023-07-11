@@ -1,5 +1,11 @@
 const fs = require('fs');
 const path = require('path');
+const axios = require('axios');
+const stream = require('stream');
+const { promisify } = require('util');
+const { v4: uuidv4 } = require('uuid');
+
+const pipeline = promisify(stream.pipeline);
 
 const express = require('express');
 const multer = require('multer');
@@ -70,9 +76,51 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 
+const fetchImage = async (req, res) => {
+    const imageURL = req.query.imageURL;
+    console.log(`Fetching image from ${imageURL}`);
+
+    const imageFileName = uuidv4();
+    const originalImageFilePath = path.join(originalImagesOutputDirPath, imageFileName + ".jpg");
+
+    try {
+        const response = await axios({
+            url: imageURL,
+            method: 'GET',
+            responseType: 'stream',
+        });
+
+        console.log(response.data);
+
+        await pipeline(response.data, fs.createWriteStream(originalImageFilePath));
+
+        const categoryName = req.query.categoryName;
+        const categoryFolderPath = path.join(imagesOutputDirPath, categoryName);
+        if (!fs.existsSync(categoryFolderPath)) {
+            fs.mkdirSync(categoryFolderPath);
+        }
+
+        const outputFilename = imageFileName + ".jpg";
+        const outputFile = path.join(categoryFolderPath, outputFilename);
+
+        await sharp(originalImageFilePath)
+            .resize(1920, 1080, {
+                fit: 'inside'
+            })
+            .jpeg()
+            .toFile(outputFile);
+
+        res.status(200).json({ message: 'Image fetched, converted and saved successfully' });
+    } catch (error) {
+        console.error(`Error fetching image: ${error}`);
+        res.status(500).json({ message: 'Server error' });
+    }
+}
+
 app.use(express.json());
 app.post('/generate', handleGenerate);
 app.post('/save', handleSave);
+app.post('/fetch-image', fetchImage)
 app.post(
     '/copy-image',
     upload.single('imageFile'),

@@ -80,6 +80,19 @@ const EditableQuestionAnswerPair = ({
     };
 
     const handleImageUploadClick = () => {
+        if (question) {
+            fetch(`/fetch-image?imageURL=${question}&categoryName=${categoryName}`, {
+                method: 'POST',
+            }).then(response => {
+                console.log(response);
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.blob();
+            })
+
+            return;
+        }
         const input = document.createElement("input");
         input.type = "file";
         input.accept = "image/*";
