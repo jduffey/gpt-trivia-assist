@@ -87,10 +87,12 @@ const EditableQuestionAnswerPair = ({
         input.onchange = (event) => {
             const file = event.target.files[0];
             const fileName = file.name;
-            const questionFieldText = `J:\\${folderNameInput}\\${categoryName}\\${fileName}`;
+            const fileNameWithoutExtension = fileName.split('.')[0];
+            const fileNameAsDotJpg = fileNameWithoutExtension + '.jpg';
+
+            const questionFieldText = `J:\\${folderNameInput}\\${categoryName}\\${fileNameAsDotJpg}`;
             onQuestionChange(index, questionFieldText);
 
-            const fileNameWithoutExtension = fileName.split('.')[0];
             onAnswerChange(index, fileNameWithoutExtension);
 
             const fileURL = URL.createObjectURL(file);
